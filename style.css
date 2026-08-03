@@ -5333,3 +5333,184 @@ html[data-theme="light"] .logo-text {
     padding: 7px 12px;
   }
 }
+
+/* ==========================================================================
+   33. ISLAND LIFE-CYCLE + APPLE MENU + 3D CHARACTER
+   ========================================================================== */
+
+/* --- 33a. Dynamic Island: drop-in intro, collapse to mini pill, re-expand ---
+   iOS-only element — these rules never touch desktop browsers. */
+
+/* Smooth morph between states (transform/opacity/height/padding only) */
+.island-widget {
+  transition:
+    transform 0.55s cubic-bezier(0.32, 0.72, 0.28, 1),
+    opacity 0.4s ease,
+    height 0.5s var(--ease-bounce),
+    padding 0.5s var(--ease-bounce),
+    gap 0.5s var(--ease-bounce);
+  touch-action: manipulation;
+}
+
+/* Intro: slides down from behind the real notch, springs into place */
+.island-widget.entering {
+  animation: islandDropIn 0.85s var(--ease-out);
+}
+
+@keyframes islandDropIn {
+  0%   { transform: translate(-50%, -84px); opacity: 0; }
+  55%  { transform: translate(-50%, 4px);   opacity: 1; }
+  75%  { transform: translate(-50%, -3px);  opacity: 1; }
+  100% { transform: translate(-50%, 0);     opacity: 1; }
+}
+
+/* Collapsed = mini pill (camera + clock) — just like a real Dynamic Island */
+.island-widget.collapsed {
+  height: 36px;
+  padding: 0 12px;
+  gap: 8px;
+}
+
+.island-widget.collapsed .island-date,
+.island-widget.collapsed .island-sep,
+.island-widget.collapsed .island-live,
+.island-widget.collapsed .island-battery,
+.island-widget.collapsed .island-dot,
+.island-widget.collapsed .island-msg {
+  display: none;
+}
+
+.island-widget.collapsed .island-clock {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* --- 33b. Mobile menu — Apple-style liquid glass + vignette + scale-in --- */
+@media (max-width: 768px) {
+  .nav-links {
+    background: rgba(5, 8, 22, 0.5);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    transform: translateY(-18px) scale(0.97);
+    transition:
+      opacity 0.35s ease,
+      transform 0.45s var(--ease-bounce),
+      visibility 0.35s ease;
+  }
+
+  /* Soft vignette — lifts the sheet off the page behind it */
+  .nav-links::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(0, 0, 0, 0.5) 100%);
+  }
+
+  .nav-links.open {
+    transform: translateY(0) scale(1);
+  }
+
+  /* Light-theme sheet — frosted white glass */
+  html[data-theme="light"] .nav-links {
+    background: rgba(242, 246, 252, 0.55);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+  }
+
+  html[data-theme="light"] .nav-links::before {
+    background: radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(15, 23, 42, 0.18) 100%);
+  }
+
+  /* Lighter, snappier reveal on phones — less perceived scroll lag */
+  .fade-up {
+    transform: translateY(18px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+}
+
+/* --- 33c. Hero character — 3D bust that tilts toward you --- */
+.avatar {
+  perspective: 640px;
+  animation: avatarFloat 4.5s ease-in-out infinite;
+}
+
+/* The whole bust rotates in 3D, following --look-x/--look-y */
+.avatar-inner {
+  overflow: visible;
+  transform-style: preserve-3d;
+  transform:
+    translateZ(0)
+    rotateX(calc(var(--look-y) * -9deg))
+    rotateY(calc(var(--look-x) * 14deg));
+  transition: transform 0.3s ease-out;
+}
+
+/* Keep the gradient sheen clipped to the circle now that overflow is visible */
+.avatar-inner::before {
+  border-radius: inherit;
+}
+
+/* Depth group — children get real Z separation */
+.avatar-bust {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* Head floats toward the viewer; shoulders stay deeper */
+.avatar-head {
+  transform: translateX(-50%) translateZ(46px);
+}
+
+.avatar-body {
+  transform: translateX(-50%) translateZ(14px);
+}
+
+/* The excited nod keeps its 3D depth */
+@keyframes avatarNod {
+  0%   { transform: translateX(-50%) translateZ(46px) translateY(0); }
+  35%  { transform: translateX(-50%) translateZ(46px) translateY(-7px); }
+  70%  { transform: translateX(-50%) translateZ(46px) translateY(2px); }
+  100% { transform: translateX(-50%) translateZ(46px) translateY(0); }
+}
+
+/* Gentle breathing float — transform-only, stays on the compositor */
+@keyframes avatarFloat {
+  0%, 100% { transform: translateY(0) rotateZ(0deg); }
+  50%      { transform: translateY(-7px) rotateZ(1deg); }
+}
+
+/* --- 33d. Touch devices: no sticky hover states, no hover transforms ---
+   Hover effects that fire on tap make buttons feel laggy and "stuck". */
+@media (hover: none) {
+  .btn:hover,
+  .btn-primary:hover,
+  .btn-ghost:hover,
+  .btn-whatsapp:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn:hover::after {
+    left: -80%;
+  }
+
+  .glass-card:hover::after {
+    background-position: 130% 0;
+  }
+
+  .profile-card:hover::before {
+    opacity: 0;
+  }
+
+  .testimonial-card:hover,
+  .service-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: running;
+  }
+}

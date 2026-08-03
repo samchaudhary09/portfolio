@@ -23,7 +23,7 @@ const DEVELOPER_CONFIG = {
   phone: '+91 9119700775',
   website: 'https://samchaudhary09.github.io/portfolio/',
   github: 'https://github.com/samchaudhary09',
-  linkedin: 'https://www.linkedin.com/public-profile/settings/?trk=d_flagship3_profile_self_view_public_profile&lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BEjDYgmsxTnaHB2bAWmehEg%3D%3D',
+  linkedin: 'https://www.linkedin.com/in/sumit-malik-346b5b204',
   experience: '2+ Years',
   education: 'BCA — Bachelor of Computer Applications',
   languages: 'English, Hindi',
@@ -1240,27 +1240,47 @@ window.SITE_PROJECTS = PROJECTS;
 
     let hideTimer = null;
 
-    /* Expand the pill with a status message, then collapse back to the clock */
-    const showStatus = (text, duration = 3200) => {
-      if (!msg) return;
-      msg.textContent = text;
-      widget.classList.add('active');
+    /* Collapse back to the mini camera+clock pill after a delay */
+    const collapseAfter = (ms) => {
       clearTimeout(hideTimer);
       hideTimer = setTimeout(() => {
         widget.classList.remove('active');
-        msg.textContent = 'Open to work · replies in 24h';
-      }, duration);
+        widget.classList.add('collapsed');
+      }, ms);
     };
 
-    /* Tap toggles the expansion manually */
+    /* Expand the pill with a status message, then collapse to the mini pill */
+    const showStatus = (text, duration = 3200) => {
+      if (!msg) return;
+      widget.classList.remove('collapsed');
+      msg.textContent = text;
+      widget.classList.add('active');
+      collapseAfter(duration);
+    };
+
+    /* Intro: drops in right after the page loader, greets the visitor,
+       then collapses to the tiny camera+clock pill under the real notch */
+    setTimeout(() => widget.classList.add('entering'), 700);
+    setTimeout(() => showStatus('👋 Welcome to Sam.dev', 4200), 950);
+
+    /* Tap the island: collapsed → expand with status; expanded → toggle,
+       then it settles back to the mini pill on its own */
     widget.addEventListener('click', () => {
-      clearTimeout(hideTimer);
-      widget.classList.toggle('active');
+      if (widget.classList.contains('collapsed')) {
+        widget.classList.remove('collapsed');
+        msg.textContent = 'Open to work · replies in 24h';
+        widget.classList.add('active');
+        collapseAfter(6000);
+      } else {
+        widget.classList.toggle('active');
+        collapseAfter(5000);
+      }
     });
 
     /* Mouse users: collapse when the pointer leaves the pill */
     widget.addEventListener('mouseleave', () => {
       widget.classList.remove('active');
+      widget.classList.add('collapsed');
     });
 
     /* Global hook for other modules (theme toggle, bot, form) */
@@ -1641,18 +1661,27 @@ window.SITE_PROJECTS = PROJECTS;
       'Wanna chat? Say hi! 💬',
     ];
 
-    /* Pupils track the pointer (CSS vars drive the transform) */
+    /* Pupils + 3D head tilt track the pointer (CSS vars drive the transform) */
     const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    const aim = (cx, cy) => {
+      const rect = avatar.getBoundingClientRect();
+      const dx = clamp((cx - (rect.left + rect.width / 2)) / (rect.width * 0.75), -1, 1);
+      const dy = clamp((cy - (rect.top + rect.height / 2)) / (rect.height * 0.75), -1, 1);
+      avatar.style.setProperty('--look-x', dx.toFixed(3));
+      avatar.style.setProperty('--look-y', dy.toFixed(3));
+    };
     if (!coarse) {
-      window.addEventListener('mousemove', (e) => {
-        const rect = avatar.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = clamp((e.clientX - cx) / (rect.width * 0.75), -1, 1);
-        const dy = clamp((e.clientY - cy) / (rect.height * 0.75), -1, 1);
-        avatar.style.setProperty('--look-x', dx.toFixed(3));
-        avatar.style.setProperty('--look-y', dy.toFixed(3));
+      window.addEventListener('mousemove', (e) => aim(e.clientX, e.clientY), { passive: true });
+    } else {
+      /* Touch: the head follows the finger, then settles back to center */
+      avatar.addEventListener('touchmove', (e) => {
+        const t = e.touches[0];
+        aim(t.clientX, t.clientY);
       }, { passive: true });
+      avatar.addEventListener('touchend', () => {
+        avatar.style.setProperty('--look-x', 0);
+        avatar.style.setProperty('--look-y', 0);
+      });
     }
 
     /* Click → excited expression + speech bubble */

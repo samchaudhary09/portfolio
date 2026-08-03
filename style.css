@@ -120,6 +120,7 @@ ul {
   z-index: -3;
   overflow: hidden;
   background: var(--bg-1);
+  pointer-events: none;
 }
 
 /* Animated gradient wash */
@@ -319,6 +320,7 @@ ul {
   height: 3px;
   z-index: 1000;
   background: transparent;
+  pointer-events: none;
 }
 
 .scroll-progress-bar {
@@ -343,6 +345,7 @@ ul {
 .page-loader.hidden {
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 }
 
 .loader-text {
@@ -1021,47 +1024,67 @@ ul {
   transform-style: preserve-3d;
 }
 
-/* Head — boy with skin, dark hair and a beard */
+/* Hoodie hood — a rounded band peeking up behind the head (Memoji vibe) */
+.char-hood {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 166px;
+  height: 78px;
+  border-radius: 50% 50% 28px 28px / 42px 42px 28px 28px;
+  background: linear-gradient(180deg, #7a5cf0 0%, #5638c2 85%);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 10px 26px rgba(0, 0, 0, 0.3);
+  z-index: 0;
+}
+
+/* Head — big Memoji-style rounded head */
 .char-head {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 116px;
-  height: 104px;
-  border-radius: 32px 32px 28px 28px;
-  background: linear-gradient(165deg, #eab287 0%, #cd9362 62%, #b47c4c 100%);
-  border: 2px solid rgba(123, 97, 255, 0.35);
+  width: 150px;
+  height: 138px;
+  border-radius: 44px 44px 40px 40px;
+  background: linear-gradient(165deg, #f2c4a0 0%, #d9a06b 60%, #c08a57 100%);
+  border: 2px solid rgba(123, 97, 255, 0.3);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -2px 6px rgba(90, 50, 20, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -3px 8px rgba(90, 50, 20, 0.22),
     0 18px 40px rgba(0, 0, 0, 0.45),
-    0 0 26px rgba(123, 97, 255, 0.18);
+    0 0 26px rgba(123, 97, 255, 0.16);
   transform-style: preserve-3d;
+  z-index: 1;
 }
 
-/* Dark hair cap on top of the head */
+/* Hair — full fringe cap with side tufts */
 .char-head::before {
   content: '';
   position: absolute;
-  top: -2px;
-  left: -2px;
+  top: -3px;
+  left: -4px;
   z-index: 2;
-  width: 116px;
-  height: 46px;
-  border-radius: 34px 34px 14px 14px;
-  background: linear-gradient(180deg, #232f52 0%, #0e1526 85%);
-  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.14), 0 4px 10px rgba(0, 0, 0, 0.35);
+  width: 158px;
+  height: 74px;
+  border-radius: 48px 48px 24px 24px;
+  background: linear-gradient(180deg, #2c3a63 0%, #0e1526 82%);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.14),
+    0 4px 10px rgba(0, 0, 0, 0.35),
+    -13px 16px 0 -10px #0e1526,
+    13px 16px 0 -10px #0e1526;
 }
 
 /* Hair shine */
 .char-head::after {
   content: '';
   position: absolute;
-  top: 6px;
-  left: 18px;
+  top: 8px;
+  left: 24px;
   z-index: 3;
-  width: 34px;
-  height: 9px;
+  width: 42px;
+  height: 11px;
   border-radius: 50%;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
   filter: blur(1.5px);
@@ -1070,49 +1093,49 @@ ul {
 /* Side ears */
 .char-ear {
   position: absolute;
-  top: 42px;
-  width: 15px;
-  height: 22px;
-  border-radius: 6px;
-  background: linear-gradient(180deg, #d9a06b, #b07a4a);
-  border: 1px solid rgba(123, 97, 255, 0.3);
+  top: 62px;
+  width: 16px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #e2ac7c, #b9825a);
+  border: 1px solid rgba(123, 97, 255, 0.25);
 }
 
-.char-ear.left  { left: -5px; }
-.char-ear.right { right: -5px; }
+.char-ear.left  { left: -7px; }
+.char-ear.right { right: -7px; }
 
-/* Face */
+/* Face — soft skin region that anchors the features */
 .char-face {
   position: absolute;
-  top: 38px;
+  top: 46px;
   left: 50%;
   transform: translateX(-50%);
-  width: 72px;
-  height: 52px;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #e8b88c, #d59a66);
-  box-shadow: inset 0 0 12px rgba(120, 70, 30, 0.12);
+  width: 100px;
+  height: 88px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #eec19a, #d9a06b);
+  box-shadow: inset 0 -10px 24px rgba(120, 70, 30, 0.14);
 }
 
 /* Eyebrows */
 .char-brow {
   position: absolute;
-  top: 2px;
-  width: 13px;
-  height: 3.5px;
-  border-radius: 3px;
-  background: #231a2e;
+  top: 6px;
+  width: 20px;
+  height: 5px;
+  border-radius: 4px;
+  background: #241a2e;
 }
 
-.char-brow.left  { left: 12px; transform: rotate(-7deg); }
-.char-brow.right { right: 12px; transform: rotate(7deg); }
+.char-brow.left  { left: 16px; transform: rotate(-8deg); }
+.char-brow.right { right: 16px; transform: rotate(8deg); }
 
-/* Eyes — white sclera with dark pupils that follow the cursor */
+/* Eyes — big white sclera with dark pupils that follow the cursor */
 .char-eye {
   position: absolute;
-  top: 10px;
-  width: 17px;
-  height: 19px;
+  top: 20px;
+  width: 22px;
+  height: 24px;
   border-radius: 50%;
   background: radial-gradient(circle at 40% 35%, #ffffff, #dfe4ee 70%);
   border: 1.5px solid rgba(70, 40, 20, 0.35);
@@ -1122,18 +1145,18 @@ ul {
   animation: eyeBlink 4.6s ease-in-out infinite;
 }
 
-.char-eye.left  { left: 10px; }
-.char-eye.right { right: 10px; }
+.char-eye.left  { left: 13px; }
+.char-eye.right { right: 13px; }
 
 .pupil {
   display: block;
   position: relative;
-  width: 7px;
-  height: 8px;
+  width: 8px;
+  height: 9px;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%, #4a3be8 0%, #1f130b 75%);
+  background: radial-gradient(circle at 38% 32%, #4a3be8 0%, #241208 75%);
   box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.6);
-  transform: translate(calc(var(--look-x) * 4px), calc(var(--look-y) * 3px));
+  transform: translate(calc(var(--look-x) * 5px), calc(var(--look-y) * 4px));
   transition: transform 0.12s ease-out;
 }
 
@@ -1142,10 +1165,10 @@ ul {
   position: absolute;
   top: 1px;
   left: 1.5px;
-  width: 2.5px;
-  height: 2.5px;
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 @keyframes eyeBlink {
@@ -1153,53 +1176,66 @@ ul {
   95%           { transform: scaleY(0.12); }
 }
 
-/* Smile — a warm arc just above the beard */
-.char-smile {
+/* Nose — soft shadow ellipse */
+.char-nose {
   position: absolute;
-  top: 30px;
+  top: 40px;
   left: 50%;
   transform: translateX(-50%);
-  width: 16px;
-  height: 9px;
-  border-radius: 0 0 999px 999px;
-  border-bottom: 2.5px solid #8a5a34;
+  width: 12px;
+  height: 15px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(160, 100, 60, 0.35), transparent 72%);
 }
 
-/* Beard — dark rounded shape over the chin */
-.char-beard {
+/* Mouth — a warm open smile sitting on the beard */
+.char-smile {
   position: absolute;
-  top: 30px;
+  top: 52px;
   left: 50%;
   transform: translateX(-50%);
-  width: 48px;
-  height: 21px;
-  border-radius: 0 0 15px 15px;
-  background: linear-gradient(180deg, #241a10, #150e07);
+  width: 20px;
+  height: 9px;
+  border-radius: 0 0 10px 10px;
+  background: rgba(15, 8, 4, 0.85);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Beard — full rounded beard over the jaw */
+.char-beard {
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 86px;
+  height: 40px;
+  border-radius: 0 0 34px 34px;
+  background: linear-gradient(180deg, #241a10, #140d06);
   box-shadow:
-    inset 0 3px 4px rgba(255, 255, 255, 0.08),
-    0 4px 8px rgba(0, 0, 0, 0.3);
+    inset 0 3px 4px rgba(255, 255, 255, 0.07),
+    0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Soft blush */
 .char-blush {
   position: absolute;
-  top: 24px;
-  width: 8px;
-  height: 5px;
+  top: 42px;
+  width: 10px;
+  height: 6px;
   border-radius: 999px;
   background: rgba(255, 120, 120, 0.45);
 }
 
-.char-blush.left  { left: 3px; }
-.char-blush.right { right: 3px; }
+.char-blush.left  { left: 4px; }
+.char-blush.right { right: 4px; }
 
 /* Neck — skin tone */
 .char-neck {
   position: absolute;
-  top: 100px;
+  top: 134px;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
+  width: 24px;
   height: 16px;
   border-radius: 6px;
   background: linear-gradient(180deg, #d9a06b, #b07a4a);
@@ -1209,11 +1245,11 @@ ul {
 /* Body — purple hoodie with a white collar */
 .char-body {
   position: absolute;
-  top: 112px;
+  top: 146px;
   left: 50%;
-  width: 112px;
-  height: 96px;
-  border-radius: 26px 26px 20px 20px;
+  width: 120px;
+  height: 88px;
+  border-radius: 30px 30px 22px 22px;
   background: linear-gradient(160deg, #8b6dff 0%, #6a4de0 55%, #5638c2 100%);
   border: 2px solid rgba(255, 255, 255, 0.22);
   box-shadow:
@@ -1231,8 +1267,8 @@ ul {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 32px;
-  height: 16px;
+  width: 36px;
+  height: 18px;
   background: linear-gradient(180deg, #ffffff, #d4d4e6);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
@@ -1240,7 +1276,7 @@ ul {
 /* Chest badge — a little "S" monogram */
 .char-badge {
   position: absolute;
-  top: 26px;
+  top: 24px;
   left: 50%;
   transform: translateX(-50%);
   width: 22px;
@@ -1257,12 +1293,25 @@ ul {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+/* Kangaroo pocket */
+.char-pocket {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 54px;
+  height: 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+}
+
 /* Arms — hoodie sleeves with skin-tone hands */
 .char-arm {
   position: absolute;
-  top: 124px;
-  width: 20px;
-  height: 58px;
+  top: 138px;
+  width: 22px;
+  height: 62px;
   border-radius: 999px;
   background: linear-gradient(180deg, #6a4de0, #4a31ad);
   border: 1.5px solid rgba(255, 255, 255, 0.25);
@@ -1271,16 +1320,16 @@ ul {
   transform-style: preserve-3d;
 }
 
-.char-arm.left  { left: 12px; }
-.char-arm.right { right: 12px; }
+.char-arm.left  { left: 13px; }
+.char-arm.right { right: 13px; }
 
 .char-hand {
   position: absolute;
-  bottom: -7px;
+  bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 17px;
-  height: 17px;
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
   background: linear-gradient(160deg, #e8b88c, #c98f5e);
   border: 1.5px solid rgba(123, 97, 255, 0.3);
@@ -1290,17 +1339,17 @@ ul {
 /* Legs — jeans */
 .char-leg {
   position: absolute;
-  top: 204px;
-  width: 22px;
-  height: 34px;
+  top: 230px;
+  width: 24px;
+  height: 40px;
   border-radius: 10px 10px 8px 8px;
   background: linear-gradient(180deg, #33406e, #222c4e);
   border: 1.5px solid rgba(255, 255, 255, 0.16);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
-.char-leg.left  { left: 34px; }
-.char-leg.right { right: 34px; }
+.char-leg.left  { left: 42px; }
+.char-leg.right { right: 42px; }
 
 /* Ground shadow */
 .char-shadow {
@@ -1308,7 +1357,7 @@ ul {
   bottom: 2px;
   left: 50%;
   transform: translateX(-50%);
-  width: 140px;
+  width: 150px;
   height: 20px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.45);
@@ -4810,6 +4859,10 @@ html[data-theme="light"] .char-body {
   background: linear-gradient(160deg, #9d82ff 0%, #7a5cf0 55%, #6445d4 100%);
 }
 
+html[data-theme="light"] .char-hood {
+  background: linear-gradient(180deg, #8f72ff 0%, #6a4de0 85%);
+}
+
 html[data-theme="light"] .char-arm {
   background: linear-gradient(180deg, #7a5cf0, #5a3ec4);
 }
@@ -5339,6 +5392,16 @@ html[data-theme="light"] .char-shadow {
 
   .nav-links.open {
     transform: translateY(0) scale(1);
+  }
+
+  /* Closed overlay can never swallow taps — hard guarantee even mid-
+     transition or if a class ever gets stuck */
+  .nav-links:not(.open) {
+    pointer-events: none;
+  }
+
+  .nav-links.open {
+    pointer-events: auto;
   }
 
   /* Light-theme sheet — frosted white glass */

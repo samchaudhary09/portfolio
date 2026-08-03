@@ -538,6 +538,7 @@ window.SITE_PROJECTS = PROJECTS;
     const sections = [...document.querySelectorAll('main section[id]')];
     const links = [...document.querySelectorAll('.nav-link')];
     if (!sections.length || !links.length) return;
+    if (!('IntersectionObserver' in window)) return;
 
     const map = new Map(
       links.map((l) => {
@@ -564,26 +565,78 @@ window.SITE_PROJECTS = PROJECTS;
 
   /* =========================================================================
      9. REVEAL ANIMATIONS — Intersection Observer, fade/scale up
+        Bulletproof: every observer ALSO gets a self-removing rAF sweep on
+        scroll/touch/resize, so content can never stay invisible on mobile
+        browsers where IntersectionObserver fires late or not at all
+        (notably with content-visibility sections).
      ======================================================================== */
-  const initReveals = () => {
-    const els = document.querySelectorAll('.fade-up');
-    if (!('IntersectionObserver' in window)) {
-      els.forEach((el) => el.classList.add('in-view'));
+
+  /* Shared sweep — fires 'inview' on any element that has entered the
+     viewport, then forgets it. Removes its own listeners when done. */
+  const pendingInView = new Set();
+  let sweepWired = false;
+
+  const checkInView = () => {
+    if (!pendingInView.size) {
+      sweepWired = false;
+      window.removeEventListener('scroll', sweepInView);
+      window.removeEventListener('resize', sweepInView);
+      document.removeEventListener('touchstart', sweepInView);
+      document.removeEventListener('pointerdown', sweepInView);
       return;
     }
+    const vh = window.innerHeight || document.documentElement.clientHeight || 900;
+    pendingInView.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < vh - 24 && r.bottom > -60) {
+        pendingInView.delete(el);
+        el.dispatchEvent(new Event('inview'));
+      }
+    });
+  };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-    els.forEach((el) => observer.observe(el));
+  const sweepInView = () => requestAnimationFrame(checkInView);
+
+  const onInView = (el, cb) => {
+    let fired = false;
+    const fire = () => {
+      if (fired) return;
+      fired = true;
+      cb();
+    };
+    el.addEventListener('inview', fire, { once: true });
+
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              obs.disconnect();
+              pendingInView.delete(entry.target);
+              fire();
+            }
+          });
+        },
+        { threshold: 0, rootMargin: '0px 0px -8% 0px' }
+      );
+      obs.observe(el);
+    }
+
+    pendingInView.add(el);
+    if (!sweepWired) {
+      sweepWired = true;
+      window.addEventListener('scroll', sweepInView, { passive: true });
+      window.addEventListener('resize', sweepInView, { passive: true });
+      document.addEventListener('touchstart', sweepInView, { passive: true });
+      document.addEventListener('pointerdown', sweepInView, { passive: true });
+    }
+    checkInView();
+  };
+
+  const initReveals = () => {
+    document.querySelectorAll('.fade-up').forEach((el) => {
+      onInView(el, () => el.classList.add('in-view'));
+    });
   };
 
   /* =========================================================================
@@ -781,18 +834,7 @@ window.SITE_PROJECTS = PROJECTS;
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animate(entry.target);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    counters.forEach((el) => observer.observe(el));
+    counters.forEach((el) => onInView(el, () => animate(el)));
   };
 
   /* =========================================================================
@@ -846,28 +888,7 @@ window.SITE_PROJECTS = PROJECTS;
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            fillBar(entry.target);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    bars.forEach((el) => observer.observe(el));
-
-    /* Safety net: bars already inside the viewport on load */
-    const vh = window.innerHeight;
-    bars.forEach((bar) => {
-      const rect = bar.getBoundingClientRect();
-      if (rect.top < vh && rect.bottom > 0) {
-        observer.unobserve(bar);
-        fillBar(bar);
-      }
-    });
+    bars.forEach((bar) => onInView(bar, () => fillBar(bar)));
   };
 
   /* =========================================================================
@@ -880,22 +901,7 @@ window.SITE_PROJECTS = PROJECTS;
 
     /* Reveal items with stagger */
     const items = timeline.querySelectorAll('.timeline-item');
-    if (!('IntersectionObserver' in window)) {
-      items.forEach((el) => el.classList.add('in-view'));
-    } else {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('in-view');
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.25 }
-      );
-      items.forEach((el) => observer.observe(el));
-    }
+    items.forEach((el) => onInView(el, () => el.classList.add('in-view')));
 
     /* Fill the line based on scroll position */
     if (!progressEl) return;

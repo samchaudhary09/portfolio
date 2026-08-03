@@ -4815,3 +4815,418 @@ html[data-theme="light"] .logo-text {
     transition: none;
   }
 }
+
+/* ==========================================================================
+   31. MOBILE PREMIUM UI — iPhone-first polish
+   --------------------------------------------------------------------------
+   Everything in this section is scoped to small viewports (max-width
+   breakpoints) or hidden by default, so desktop / laptop rendering is
+   completely untouched. New Dynamic Island elements get `display: none`
+   here so they never appear on desktop, then are re-enabled inside the
+   mobile media queries below.
+   ========================================================================== */
+
+/* --- Base: keep the new island elements off desktop --- */
+.island-date,
+.island-sep,
+.island-live,
+.island-battery {
+  display: none;
+}
+
+/* ==========================================================================
+   31a. PREMIUM DYNAMIC ISLAND (mobile only)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .island-widget {
+    height: 40px;
+    padding: 0 16px;
+    gap: 10px;
+    max-width: calc(100vw - 28px);
+    top: calc(env(safe-area-inset-top) + 10px);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(48, 50, 60, 0.92), rgba(10, 11, 16, 0.94));
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+      0 14px 44px rgba(0, 0, 0, 0.55),
+      0 2px 12px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    transition: padding 0.5s var(--ease-bounce), gap 0.5s var(--ease-bounce);
+  }
+
+  /* Camera lens — bigger, with a deeper inner shadow */
+  .island-camera {
+    width: 10px;
+    height: 10px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  /* Date chip — "TUE · AUG 04", refreshed by script.js */
+  .island-date {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Clock — brighter, bolder, monospace tabular */
+  .island-clock {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    flex-shrink: 0;
+  }
+
+  /* Hairline divider */
+  .island-sep {
+    display: block;
+    width: 1px;
+    height: 16px;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    flex-shrink: 0;
+  }
+
+  /* Status message — caps at a safe width so the pill never overflows */
+  .island-msg {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  /* LIVE badge — iOS "live activity" red pill */
+  .island-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(255, 59, 48, 0.12);
+    border: 1px solid rgba(255, 59, 48, 0.35);
+    flex-shrink: 0;
+  }
+
+  .island-live-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ff3b30;
+    box-shadow: 0 0 8px rgba(255, 59, 48, 0.9);
+    animation: islandLivePulse 1.5s ease-in-out infinite;
+  }
+
+  .island-live-txt {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  @keyframes islandLivePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.45; transform: scale(0.8); }
+  }
+
+  /* Battery — iOS-style shell with cap */
+  .island-battery {
+    display: flex;
+    align-items: center;
+    gap: 1.5px;
+    width: 19px;
+    height: 11px;
+    padding: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .island-battery::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 5px;
+    border-radius: 0 2px 2px 0;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .island-batt-fill {
+    flex: 1;
+    height: 100%;
+    border-radius: 1px;
+    background: linear-gradient(180deg, #5bd66b, #34c759);
+  }
+
+  .island-batt-fill.dim {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* Old green pulse dot — replaced by the LIVE badge on mobile */
+  .island-dot {
+    display: none;
+  }
+
+  /* Expanded state — stays inside the viewport on every iPhone size */
+  .island-widget.active {
+    padding: 0 20px;
+    gap: 8px;
+  }
+
+  .island-widget.active .island-msg {
+    max-width: min(300px, 42vw);
+  }
+}
+
+/* Tiny phones: drop the date + battery while expanded so the status
+   message always fits next to the clock and LIVE badge */
+@media (max-width: 480px) {
+  .island-widget.active .island-date,
+  .island-widget.active .island-battery {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   31b. CHARACTER-ONLY PROFILE CARD (mobile only)
+   --------------------------------------------------------------------------
+   On phones the card collapses to just the interactive avatar — the name,
+   niche, meta, chips and CTAs are already available in the hero text above,
+   so removing them here gives a clean, premium "character" stage.
+   ========================================================================== */
+@media (max-width: 768px) {
+  .profile-card {
+    width: 220px;
+    padding: 20px 18px 18px;
+    border-radius: 26px;
+  }
+
+  .profile-card .profile-info,
+  .profile-card .profile-niche,
+  .profile-card .profile-meta,
+  .profile-card .profile-chips,
+  .profile-card .profile-cta {
+    display: none;
+  }
+
+  .profile-card .avatar {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 0;
+  }
+
+  .profile-card .profile-glow {
+    top: -46px;
+    width: 170px;
+    height: 170px;
+  }
+
+  /* Compact stage: one ring, no second ring, tighter vertical space */
+  .hero-visual {
+    min-height: 420px;
+  }
+
+  .ring-1 {
+    width: 330px;
+    height: 330px;
+  }
+
+  .ring-2 {
+    display: none;
+  }
+
+  /* Float icons pulled inside the viewport so nothing overflows */
+  .float-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .float-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .icon-html    { top: 5%;    left: 3%; }
+  .icon-css     { top: 0%;    right: 4%; }
+  .icon-js      { top: 38%;   right: 2%; }
+  .icon-git     { bottom: 16%; right: 3%; }
+  .icon-figma   { bottom: 2%; left: 4%; }
+  .icon-vscode  { top: 22%;   left: 1%; }
+}
+
+/* ==========================================================================
+   31c. MOBILE ALIGNMENT FIXES (buttons, hero, navbar, sections)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* No horizontal scroll from decorative layers on phones */
+  .hero,
+  .page-hero {
+    overflow-x: clip;
+  }
+
+  /* Compact navbar */
+  .navbar-inner {
+    height: 64px;
+    gap: 12px;
+  }
+
+  .logo {
+    font-size: 1.3rem;
+  }
+
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Tighter hero spacing so everything fits above the fold */
+  .hero {
+    padding-top: 108px;
+    padding-bottom: 56px;
+  }
+
+  @supports (top: env(safe-area-inset-top)) {
+    .hero {
+      padding-top: calc(84px + env(safe-area-inset-top));
+    }
+
+    .page-hero {
+      padding-top: calc(120px + env(safe-area-inset-top));
+    }
+  }
+
+  .section {
+    padding: 64px 0;
+  }
+
+  .hero-content {
+    gap: 20px;
+  }
+
+  .hero-badge {
+    font-size: 0.8rem;
+    padding: 8px 14px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 9vw, 3rem);
+    line-height: 1.1;
+  }
+
+  .hero-role {
+    font-size: 1.2rem;
+  }
+
+  .hero-desc {
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  /* Action buttons — clean 2-column grid, WhatsApp full-width */
+  .hero-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+    font-size: 0.92rem;
+    white-space: nowrap;
+  }
+
+  .hero-actions .btn-whatsapp {
+    grid-column: 1 / -1;
+  }
+
+  /* Stats strip — evenly spread, never wraps awkwardly */
+  .hero-stats {
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px 24px;
+    margin-top: 6px;
+    padding-top: 20px;
+  }
+
+  .hero-stat-num {
+    font-size: 1.35rem;
+  }
+
+  .hero-stat-label {
+    font-size: 0.8rem;
+  }
+
+  /* Forms: full-width submit button = easy thumb target */
+  .form-card .btn-primary {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  /* Project detail buttons stack full-width on small screens */
+  .project-actions .btn {
+    width: 100%;
+  }
+}
+
+/* ---------- Small phones (≤ 420px): tighten further ---------- */
+@media (max-width: 420px) {
+  .container {
+    width: min(var(--container), 100% - 2 * 16px);
+  }
+
+  .hero-title {
+    font-size: 2.15rem;
+  }
+
+  .hero-role {
+    font-size: 1.1rem;
+  }
+
+  .hero-visual {
+    min-height: 380px;
+  }
+
+  .ring-1 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .profile-card {
+    width: 200px;
+    padding: 16px 14px 14px;
+    border-radius: 24px;
+  }
+
+  .profile-card .avatar {
+    width: 128px;
+    height: 128px;
+  }
+
+  .island-widget {
+    height: 38px;
+    padding: 0 14px;
+  }
+
+  .section {
+    padding: 56px 0;
+  }
+}
+
+/* Reduced motion: pause the new island pulse */
+@media (prefers-reduced-motion: reduce) {
+  .island-live-dot {
+    animation: none;
+  }
+}

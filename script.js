@@ -1200,6 +1200,7 @@ window.SITE_PROJECTS = PROJECTS;
     if (isIOS) document.documentElement.classList.add('ios');
 
     const clock = document.getElementById('island-clock');
+    const dateEl = document.getElementById('island-date');
     const msg = document.getElementById('island-msg');
 
     const updateClock = () => {
@@ -1208,6 +1209,14 @@ window.SITE_PROJECTS = PROJECTS;
       const hh = String(now.getHours()).padStart(2, '0');
       const mm = String(now.getMinutes()).padStart(2, '0');
       clock.textContent = `${hh}:${mm}`;
+
+      /* "Tue · Aug 04" — refreshed daily, hidden on desktop */
+      if (dateEl) {
+        const day = now.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+        const month = now.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+        const dd = String(now.getDate()).padStart(2, '0');
+        dateEl.textContent = `${day} · ${month} ${dd}`;
+      }
     };
     updateClock();
     setInterval(updateClock, 15000);

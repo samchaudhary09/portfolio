@@ -1000,141 +1000,299 @@ ul {
   to   { opacity: 1;   transform: translateX(-50%) scale(1.15); }
 }
 
-/* CSS-generated avatar */
+/* ---- Interactive 3D character (pure-CSS robot dev) ---- */
 .avatar {
   position: relative;
   z-index: 2;
-  width: 170px;
-  height: 170px;
-  margin-bottom: 24px;
+  width: 200px;
+  height: 270px;
+  margin: 0 auto 18px;
 }
 
-.avatar-inner {
+.char-scene {
+  position: absolute;
+  inset: 0;
+}
+
+.char-bot {
+  position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  background: linear-gradient(160deg, #1e293b, #0f172a);
-  border: 3px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 6px rgba(123, 97, 255, 0.18), 0 0 44px rgba(123, 97, 255, 0.35);
-  position: relative;
-  overflow: hidden;
-  transform: translateZ(30px);
+  transform-style: preserve-3d;
 }
 
-/* gradient sheen across avatar */
-.avatar-inner::before {
+/* Head — rounded robot dome */
+.char-head {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 116px;
+  height: 104px;
+  border-radius: 32px 32px 28px 28px;
+  background: linear-gradient(165deg, #33405f 0%, #1c2540 62%, #141c33 100%);
+  border: 2px solid rgba(123, 97, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.4),
+    0 18px 40px rgba(0, 0, 0, 0.45),
+    0 0 26px rgba(123, 97, 255, 0.22);
+  transform-style: preserve-3d;
+}
+
+/* Gloss on the top of the dome */
+.char-head::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 30%, rgba(123, 97, 255, 0.25) 50%, transparent 70%);
-  background-size: 200% 200%;
-  animation: avatarSheen 5s ease-in-out infinite;
+  top: 6px;
+  left: 14px;
+  width: 44px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent);
+  filter: blur(2px);
 }
 
-@keyframes avatarSheen {
-  0%, 100% { background-position: 0% 0%; }
-  50%      { background-position: 100% 100%; }
-}
-
-/* Head */
-.avatar-head {
+/* Antenna with blinking bulb */
+.char-antenna {
   position: absolute;
-  top: 18px;
+  top: -16px;
   left: 50%;
   transform: translateX(-50%);
-  width: 82px;
-  height: 92px;
-  border-radius: 50% 50% 46% 46%;
-  background: linear-gradient(160deg, #d9a06b, #b07a4a);
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #7B61FF, #3a2f6e);
 }
 
-/* Hair */
-.avatar-head::before {
-  content: '';
+.char-antenna-light {
   position: absolute;
-  top: -14px;
-  left: -8px;
-  width: 98px;
-  height: 52px;
-  border-radius: 50% 55% 45% 50%;
-  background: #0b0f1e;
-}
-
-.avatar-head::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: -8px;
-  width: 98px;
-  height: 34px;
-  border-radius: 0 0 50% 50%;
-  background: linear-gradient(160deg, #d9a06b, #b07a4a);
-}
-
-/* Face features */
-.avatar-face {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-}
-
-.avatar-eye {
-  position: absolute;
-  top: 42px;
-  width: 7px;
-  height: 9px;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: #0b0f1e;
-  animation: eyeBlink 4.5s ease-in-out infinite;
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.9);
+  animation: charAntenna 2.6s ease-in-out infinite;
 }
 
-.avatar-eye.left  { left: 22px; }
-.avatar-eye.right { right: 22px; }
+@keyframes charAntenna {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50%      { opacity: 0.35; transform: translateX(-50%) scale(0.7); }
+}
+
+/* Side ears */
+.char-ear {
+  position: absolute;
+  top: 34px;
+  width: 16px;
+  height: 34px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #2a3552, #182036);
+  border: 1px solid rgba(123, 97, 255, 0.4);
+}
+
+.char-ear.left  { left: -6px; }
+.char-ear.right { right: -6px; }
+
+/* Faceplate */
+.char-face {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(6, 10, 24, 0.85), rgba(10, 15, 32, 0.9));
+  border: 1px solid rgba(123, 97, 255, 0.35);
+  box-shadow: inset 0 0 18px rgba(0, 212, 255, 0.08);
+}
+
+/* Eyes — glowing visors that follow the cursor */
+.char-eye {
+  position: absolute;
+  top: 12px;
+  width: 22px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #0e162e, #050a1a 70%);
+  border: 2px solid rgba(0, 212, 255, 0.85);
+  box-shadow:
+    0 0 12px rgba(0, 212, 255, 0.55),
+    inset 0 0 8px rgba(0, 212, 255, 0.5);
+  display: grid;
+  place-items: center;
+  animation: eyeBlink 4.6s ease-in-out infinite;
+}
+
+.char-eye.left  { left: 9px; }
+.char-eye.right { right: 9px; }
+
+.pupil {
+  display: block;
+  width: 8px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.9);
+  transform: translate(calc(var(--look-x) * 4px), calc(var(--look-y) * 3px));
+  transition: transform 0.12s ease-out;
+}
 
 @keyframes eyeBlink {
   0%, 92%, 100% { transform: scaleY(1); }
-  95%           { transform: scaleY(0.1); }
+  95%           { transform: scaleY(0.12); }
 }
 
-.avatar-smile {
+/* LED smile */
+.char-smile {
   position: absolute;
-  top: 62px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
-  width: 22px;
-  height: 11px;
-  border-bottom: 2.5px solid #0b0f1e;
-  border-radius: 0 0 50% 50%;
+  width: 26px;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(20, 241, 149, 0.5), #14F195, rgba(20, 241, 149, 0.5));
+  box-shadow: 0 0 10px rgba(20, 241, 149, 0.8);
+  animation: charSmile 3s ease-in-out infinite;
 }
 
-/* Body / shoulders */
-.avatar-body {
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 150px;
-  height: 78px;
-  border-radius: 50% 50% 0 0;
-  background: linear-gradient(135deg, #7B61FF, #8B5CF6);
+@keyframes charSmile {
+  0%, 100% { transform: translateX(-50%) scaleX(1); opacity: 0.9; }
+  50%      { transform: translateX(-50%) scaleX(1.25); opacity: 1; }
 }
 
-.avatar-shadow {
+/* Neck */
+.char-neck {
   position: absolute;
-  bottom: -18px;
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
-  width: 130px;
+  width: 26px;
   height: 18px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  filter: blur(8px);
-  animation: avatarShadow 3s ease-in-out infinite;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #1b2338, #111827);
+  border: 1px solid rgba(123, 97, 255, 0.3);
 }
 
-@keyframes avatarShadow {
-  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.55; }
-  50%      { transform: translateX(-50%) scale(0.82); opacity: 0.35; }
+/* Body — rounded torso with chest panel */
+.char-body {
+  position: absolute;
+  top: 112px;
+  left: 50%;
+  width: 112px;
+  height: 96px;
+  border-radius: 26px 26px 20px 20px;
+  background: linear-gradient(160deg, #313d5c 0%, #1d2640 60%, #151d35 100%);
+  border: 2px solid rgba(123, 97, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.4),
+    0 14px 34px rgba(0, 0, 0, 0.4),
+    0 0 22px rgba(123, 97, 255, 0.18);
+  transform-style: preserve-3d;
+}
+
+.char-body::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 54px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(6, 10, 24, 0.9), rgba(10, 15, 32, 0.85));
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  box-shadow: inset 0 0 14px rgba(0, 212, 255, 0.06);
+}
+
+/* Glowing core — beats like a heartbeat */
+.char-core {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 16px rgba(0, 212, 255, 0.9), 0 0 34px rgba(0, 212, 255, 0.4);
+  animation: charCore 1.6s ease-in-out infinite;
+}
+
+@keyframes charCore {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  30%      { transform: translateX(-50%) scale(1.45); }
+  45%      { transform: translateX(-50%) scale(1.15); }
+  60%      { transform: translateX(-50%) scale(1.35); }
+}
+
+/* Arms — capsules that hang from the shoulders */
+.char-arm {
+  position: absolute;
+  top: 124px;
+  width: 20px;
+  height: 58px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2b3654, #1a2238);
+  border: 1.5px solid rgba(123, 97, 255, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 6px 14px rgba(0, 0, 0, 0.35);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+}
+
+.char-arm.left  { left: 12px; }
+.char-arm.right { right: 12px; }
+
+.char-hand {
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #3d4a70, #232d4c);
+  border: 1.5px solid rgba(123, 97, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Legs */
+.char-leg {
+  position: absolute;
+  top: 204px;
+  width: 22px;
+  height: 34px;
+  border-radius: 10px 10px 8px 8px;
+  background: linear-gradient(180deg, #232c48, #161e34);
+  border: 1.5px solid rgba(123, 97, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.char-leg.left  { left: 34px; }
+.char-leg.right { right: 34px; }
+
+/* Ground shadow */
+.char-shadow {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  filter: blur(9px);
+  animation: charShadow 5s ease-in-out infinite;
+}
+
+@keyframes charShadow {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
+  50%      { transform: translateX(-50%) scale(0.82); opacity: 0.32; }
 }
 
 /* Card text */
@@ -4095,7 +4253,7 @@ html[data-theme="light"] .chat-input-row input {
 }
 
 /* ==========================================================================
-   28. iOS / DYNAMIC ISLAND / MARQUEE / TESTIMONIALS / MOBILE POLISH
+   28. IOS POLISH / MARQUEE / TESTIMONIALS / MOBILE POLISH
    ========================================================================== */
 
 /* --- Global mobile/iPhone touch polish --- */
@@ -4124,14 +4282,10 @@ select {
   }
 }
 
-/* --- Safe areas: keep UI clear of the notch / Dynamic Island / home bar --- */
+/* --- Safe areas: keep UI clear of the notch / home bar --- */
 @supports (padding-top: env(safe-area-inset-top)) {
   .navbar {
     padding-top: env(safe-area-inset-top);
-  }
-
-  .island-widget {
-    top: calc(env(safe-area-inset-top) + 6px);
   }
 
   .chat-widget {
@@ -4161,94 +4315,6 @@ select {
       max-height: calc(78vh + env(safe-area-inset-bottom));
     }
   }
-}
-
-/* --- Dynamic Island widget (visible on iOS only) --- */
-.island-widget {
-  position: fixed;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none;
-  align-items: center;
-  gap: 9px;
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(8, 8, 10, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5);
-  z-index: 140;
-  cursor: pointer;
-  user-select: none;
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  transition: padding 0.5s var(--ease-bounce);
-}
-
-html.ios .island-widget {
-  display: flex;
-}
-
-/* The pill stays below the menu overlay */
-body.menu-open .island-widget {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Mini FaceTime-style camera dot */
-.island-camera {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #243449, #02030a 65%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  flex-shrink: 0;
-}
-
-.island-clock {
-  font-family: 'Space Grotesk', ui-monospace, monospace;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.88);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.island-msg {
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 12.5px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.95);
-  opacity: 0;
-  transition: max-width 0.5s var(--ease-bounce), opacity 0.3s ease;
-}
-
-.island-widget.active {
-  padding: 0 18px;
-}
-
-.island-widget.active .island-msg {
-  max-width: 340px;
-  opacity: 1;
-}
-
-.island-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 10px var(--green);
-  flex-shrink: 0;
-  animation: islandPulse 2.2s ease-in-out infinite;
-}
-
-@keyframes islandPulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.35; }
 }
 
 /* --- Tech marquee — infinite scrolling skill strip --- */
@@ -4372,7 +4438,7 @@ body.menu-open .island-widget {
   color: var(--text-3);
 }
 
-/* --- Responsive: marquee + testimonials + island --- */
+/* --- Responsive: marquee + testimonials --- */
 @media (max-width: 1024px) {
   .testimonials-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -4396,24 +4462,11 @@ body.menu-open .island-widget {
   .mq-sep {
     margin: 0 20px;
   }
-
-  .island-widget {
-    height: 31px;
-  }
 }
 
 /* --- Reduced motion: pause decorative animations --- */
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
-    animation: none;
-  }
-
-  .island-widget,
-  .island-widget.active .island-msg {
-    transition: none;
-  }
-
-  .island-dot {
     animation: none;
   }
 }
@@ -4559,119 +4612,61 @@ html[data-theme="light"] .logo-text {
 }
 
 /* ==========================================================================
-   30. INTERACTIVE AVATAR + RECRUITER-FRIENDLY PROFILE CARD
+   30. INTERACTIVE 3D CHARACTER + RECRUITER-FRIENDLY PROFILE CARD
    ========================================================================== */
 
-/* Avatar is clickable now */
+/* Character is clickable — cursor look is driven by --look-x/--look-y */
 .avatar {
   cursor: pointer;
   --look-x: 0;
   --look-y: 0;
 }
 
-/* Eyes — white sclera with a pupil that follows the cursor */
-.avatar-eye {
-  position: absolute;
-  top: 45px;
-  width: 12px;
-  height: 13px;
-  border-radius: 50%;
-  background: #ffffff;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(11, 15, 30, 0.25);
-  animation: eyeBlink 4.5s ease-in-out infinite;
+/* Excited reaction: the bot raises its right arm and waves, eyes widen,
+   head nods — the nod keeps its 3D depth (keyframes live in section 33c) */
+.avatar.excited .char-arm.right {
+  animation: charWave 0.5s ease-in-out infinite;
 }
 
-.avatar-eye.left  { left: 20px; }
-.avatar-eye.right { right: 20px; }
-
-.pupil {
-  display: block;
-  width: 5px;
-  height: 6px;
-  border-radius: 50%;
-  background: #0b0f1e;
-  transform: translate(calc(var(--look-x) * 4px), calc(var(--look-y) * 3px));
-  transition: transform 0.12s ease-out;
+.avatar.excited .char-head {
+  animation: charNod 0.55s var(--ease-out);
 }
 
-/* Eyebrows */
-.avatar-brow {
-  position: absolute;
-  top: 33px;
-  width: 16px;
-  height: 3px;
-  border-radius: 3px;
-  background: #0b0f1e;
-  opacity: 0.85;
-}
-
-.avatar-brow.left  { left: 19px; }
-.avatar-brow.right { right: 19px; }
-
-/* Nose + blush — small touches that make the face read better */
-.avatar-nose {
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 6px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #b07a4a, #a06a3f);
-}
-
-.avatar-blush {
-  position: absolute;
-  top: 64px;
-  width: 11px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 95, 109, 0.32);
-  filter: blur(0.5px);
-}
-
-.avatar-blush.left  { left: 12px; }
-.avatar-blush.right { right: 12px; }
-
-/* Smile sits below the nose now */
-.avatar-smile {
-  top: 70px;
-}
-
-/* Excited reaction: open-mouth smile + quick nod */
-.avatar.excited .avatar-smile {
-  top: 69px;
-  width: 14px;
-  height: 11px;
-  border: 2.5px solid #0b0f1e;
-  border-top: none;
-  border-radius: 0 0 50% 50%;
-  background: #0b0f1e;
-}
-
-.avatar.excited .avatar-head {
-  animation: avatarNod 0.55s var(--ease-out);
-}
-
-.avatar.excited .avatar-eye {
+.avatar.excited .char-eye {
   animation: none;
-  transform: scaleY(1.15);
+  transform: scaleY(1.2);
 }
 
-@keyframes avatarNod {
-  0%   { transform: translateX(-50%) translateY(0); }
-  35%  { transform: translateX(-50%) translateY(-7px); }
-  70%  { transform: translateX(-50%) translateY(2px); }
-  100% { transform: translateX(-50%) translateY(0); }
+@keyframes charWave {
+  0%, 100% { transform: translateZ(26px) rotate(-135deg); }
+  50%      { transform: translateZ(26px) rotate(-165deg); }
 }
 
-/* Reaction speech bubble above the avatar */
+/* Light theme — lift the robot palette so it stays visible on white glass */
+html[data-theme="light"] .char-head {
+  background: linear-gradient(165deg, #4a587e 0%, #303b5e 62%, #27304f 100%);
+}
+
+html[data-theme="light"] .char-body {
+  background: linear-gradient(160deg, #46537a 0%, #2d3757 60%, #232c49 100%);
+}
+
+html[data-theme="light"] .char-arm {
+  background: linear-gradient(180deg, #3d4870, #283250);
+}
+
+html[data-theme="light"] .char-leg {
+  background: linear-gradient(180deg, #323c5e, #222a44);
+}
+
+html[data-theme="light"] .char-shadow {
+  background: rgba(15, 23, 42, 0.28);
+}
+
+/* Reaction speech bubble above the character */
 .avatar-bubble {
   position: absolute;
-  top: -16px;
+  top: -36px;
   left: 50%;
   z-index: 6;
   transform: translateX(-50%) translateY(6px) scale(0.6);
@@ -4805,12 +4800,16 @@ html[data-theme="light"] .logo-text {
   .ring-2 { width: 285px; height: 285px; }
 }
 
-/* Reduced motion: still eyes, no tracking animation */
+/* Reduced motion: still eyes, no tracking / wave / float animation */
 @media (prefers-reduced-motion: reduce) {
-  .avatar-eye,
+  .char-eye,
   .pupil,
-  .avatar-shadow,
-  .avatar.excited .avatar-head {
+  .char-shadow,
+  .char-antenna-light,
+  .char-core,
+  .avatar,
+  .avatar.excited .char-head,
+  .avatar.excited .char-arm.right {
     animation: none;
     transition: none;
   }
@@ -4821,179 +4820,8 @@ html[data-theme="light"] .logo-text {
    --------------------------------------------------------------------------
    Everything in this section is scoped to small viewports (max-width
    breakpoints) or hidden by default, so desktop / laptop rendering is
-   completely untouched. New Dynamic Island elements get `display: none`
-   here so they never appear on desktop, then are re-enabled inside the
-   mobile media queries below.
+   completely untouched.
    ========================================================================== */
-
-/* --- Base: keep the new island elements off desktop --- */
-.island-date,
-.island-sep,
-.island-live,
-.island-battery {
-  display: none;
-}
-
-/* ==========================================================================
-   31a. PREMIUM DYNAMIC ISLAND (mobile only)
-   ========================================================================== */
-@media (max-width: 768px) {
-  .island-widget {
-    height: 40px;
-    padding: 0 16px;
-    gap: 10px;
-    max-width: calc(100vw - 28px);
-    top: calc(env(safe-area-inset-top) + 10px);
-    border-radius: 999px;
-    background: linear-gradient(180deg, rgba(48, 50, 60, 0.92), rgba(10, 11, 16, 0.94));
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow:
-      0 14px 44px rgba(0, 0, 0, 0.55),
-      0 2px 12px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(30px) saturate(200%);
-    -webkit-backdrop-filter: blur(30px) saturate(200%);
-    transition: padding 0.5s var(--ease-bounce), gap 0.5s var(--ease-bounce);
-  }
-
-  /* Camera lens — bigger, with a deeper inner shadow */
-  .island-camera {
-    width: 10px;
-    height: 10px;
-    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.12);
-  }
-
-  /* Date chip — "TUE · AUG 04", refreshed by script.js */
-  .island-date {
-    display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: rgba(255, 255, 255, 0.5);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* Clock — brighter, bolder, monospace tabular */
-  .island-clock {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: #ffffff;
-    flex-shrink: 0;
-  }
-
-  /* Hairline divider */
-  .island-sep {
-    display: block;
-    width: 1px;
-    height: 16px;
-    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    flex-shrink: 0;
-  }
-
-  /* Status message — caps at a safe width so the pill never overflows */
-  .island-msg {
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  /* LIVE badge — iOS "live activity" red pill */
-  .island-live {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 7px;
-    border-radius: 999px;
-    background: rgba(255, 59, 48, 0.12);
-    border: 1px solid rgba(255, 59, 48, 0.35);
-    flex-shrink: 0;
-  }
-
-  .island-live-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #ff3b30;
-    box-shadow: 0 0 8px rgba(255, 59, 48, 0.9);
-    animation: islandLivePulse 1.5s ease-in-out infinite;
-  }
-
-  .island-live-txt {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  @keyframes islandLivePulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.45; transform: scale(0.8); }
-  }
-
-  /* Battery — iOS-style shell with cap */
-  .island-battery {
-    display: flex;
-    align-items: center;
-    gap: 1.5px;
-    width: 19px;
-    height: 11px;
-    padding: 2px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 4px;
-    flex-shrink: 0;
-    position: relative;
-  }
-
-  .island-battery::after {
-    content: '';
-    position: absolute;
-    right: -3px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 2px;
-    height: 5px;
-    border-radius: 0 2px 2px 0;
-    background: rgba(255, 255, 255, 0.4);
-  }
-
-  .island-batt-fill {
-    flex: 1;
-    height: 100%;
-    border-radius: 1px;
-    background: linear-gradient(180deg, #5bd66b, #34c759);
-  }
-
-  .island-batt-fill.dim {
-    background: rgba(255, 255, 255, 0.25);
-  }
-
-  /* Old green pulse dot — replaced by the LIVE badge on mobile */
-  .island-dot {
-    display: none;
-  }
-
-  /* Expanded state — stays inside the viewport on every iPhone size */
-  .island-widget.active {
-    padding: 0 20px;
-    gap: 8px;
-  }
-
-  .island-widget.active .island-msg {
-    max-width: min(300px, 42vw);
-  }
-}
-
-/* Tiny phones: drop the date + battery while expanded so the status
-   message always fits next to the clock and LIVE badge */
-@media (max-width: 480px) {
-  .island-widget.active .island-date,
-  .island-widget.active .island-battery {
-    display: none;
-  }
-}
 
 /* ==========================================================================
    31b. CHARACTER-ONLY PROFILE CARD (mobile only)
@@ -5018,9 +4846,14 @@ html[data-theme="light"] .logo-text {
   }
 
   .profile-card .avatar {
-    width: 140px;
-    height: 140px;
+    width: 190px;
+    height: 255px;
     margin-bottom: 0;
+  }
+
+  /* Scale the fixed-px character down to the compact card */
+  .profile-card .char-bot {
+    transform: scale(0.92);
   }
 
   .profile-card .profile-glow {
@@ -5210,24 +5043,16 @@ html[data-theme="light"] .logo-text {
   }
 
   .profile-card .avatar {
-    width: 128px;
-    height: 128px;
+    width: 150px;
+    height: 200px;
   }
 
-  .island-widget {
-    height: 38px;
-    padding: 0 14px;
+  .profile-card .char-bot {
+    transform: scale(0.72);
   }
 
   .section {
     padding: 56px 0;
-  }
-}
-
-/* Reduced motion: pause the new island pulse */
-@media (prefers-reduced-motion: reduce) {
-  .island-live-dot {
-    animation: none;
   }
 }
 
@@ -5254,7 +5079,6 @@ html[data-theme="light"] .logo-text {
   .layer-waves,
   .profile-glow,
   .profile-card::before,
-  .avatar-inner::before,
   .btn-primary,
   .typed-text,
   .hero-stat-num,
@@ -5281,16 +5105,11 @@ html[data-theme="light"] .logo-text {
     -webkit-backdrop-filter: blur(12px) saturate(160%);
   }
 
-  .island-widget {
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-  }
-
   /* Compose transforms cheaply on phones too */
   .hero-content,
   .hero-visual,
   .profile-card,
-  .avatar-inner {
+  .char-scene {
     will-change: transform;
   }
 }
@@ -5335,60 +5154,14 @@ html[data-theme="light"] .logo-text {
 }
 
 /* ==========================================================================
-   33. ISLAND LIFE-CYCLE + APPLE MENU + 3D CHARACTER
+   33. MOBILE MENU + 3D CHARACTER
    ========================================================================== */
 
-/* --- 33a. Dynamic Island: drop-in intro, collapse to mini pill, re-expand ---
-   iOS-only element — these rules never touch desktop browsers. */
-
-/* Smooth morph between states (transform/opacity/height/padding only) */
-.island-widget {
-  transition:
-    transform 0.55s cubic-bezier(0.32, 0.72, 0.28, 1),
-    opacity 0.4s ease,
-    height 0.5s var(--ease-bounce),
-    padding 0.5s var(--ease-bounce),
-    gap 0.5s var(--ease-bounce);
-  touch-action: manipulation;
-}
-
-/* Intro: slides down from behind the real notch, springs into place */
-.island-widget.entering {
-  animation: islandDropIn 0.85s var(--ease-out);
-}
-
-@keyframes islandDropIn {
-  0%   { transform: translate(-50%, -84px); opacity: 0; }
-  55%  { transform: translate(-50%, 4px);   opacity: 1; }
-  75%  { transform: translate(-50%, -3px);  opacity: 1; }
-  100% { transform: translate(-50%, 0);     opacity: 1; }
-}
-
-/* Collapsed = mini pill (camera + clock) — just like a real Dynamic Island */
-.island-widget.collapsed {
-  height: 36px;
-  padding: 0 12px;
-  gap: 8px;
-}
-
-.island-widget.collapsed .island-date,
-.island-widget.collapsed .island-sep,
-.island-widget.collapsed .island-live,
-.island-widget.collapsed .island-battery,
-.island-widget.collapsed .island-dot,
-.island-widget.collapsed .island-msg {
-  display: none;
-}
-
-.island-widget.collapsed .island-clock {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-/* --- 33b. Mobile menu — Apple-style liquid glass + vignette + scale-in --- */
+/* --- 33b. Mobile menu — solid liquid-glass sheet + vignette + scale-in ---
+   Near-opaque so the page behind never bleeds through the open menu. */
 @media (max-width: 768px) {
   .nav-links {
-    background: rgba(5, 8, 22, 0.5);
+    background: rgba(5, 8, 22, 0.97);
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
     transform: translateY(-18px) scale(0.97);
@@ -5413,7 +5186,7 @@ html[data-theme="light"] .logo-text {
 
   /* Light-theme sheet — frosted white glass */
   html[data-theme="light"] .nav-links {
-    background: rgba(242, 246, 252, 0.55);
+    background: rgba(242, 246, 252, 0.97);
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
   }
@@ -5429,54 +5202,54 @@ html[data-theme="light"] .logo-text {
   }
 }
 
-/* --- 33c. Hero character — 3D bust that tilts toward you --- */
+/* --- 33c. Hero character — 3D robot that looks at you --- */
 .avatar {
-  perspective: 640px;
-  animation: avatarFloat 4.5s ease-in-out infinite;
+  perspective: 700px;
+  animation: charFloat 5s ease-in-out infinite;
 }
 
-/* The whole bust rotates in 3D, following --look-x/--look-y */
-.avatar-inner {
+/* The whole character rotates in 3D, following --look-x/--look-y */
+.char-scene {
   overflow: visible;
   transform-style: preserve-3d;
   transform:
-    translateZ(0)
-    rotateX(calc(var(--look-y) * -9deg))
-    rotateY(calc(var(--look-x) * 14deg));
+    rotateX(calc(var(--look-y) * -8deg))
+    rotateY(calc(var(--look-x) * 12deg));
   transition: transform 0.3s ease-out;
 }
 
-/* Keep the gradient sheen clipped to the circle now that overflow is visible */
-.avatar-inner::before {
-  border-radius: inherit;
-}
-
 /* Depth group — children get real Z separation */
-.avatar-bust {
+.char-bot {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
 }
 
-/* Head floats toward the viewer; shoulders stay deeper */
-.avatar-head {
-  transform: translateX(-50%) translateZ(46px);
+/* Head floats toward the viewer; body and limbs stay deeper */
+.char-head {
+  transform: translateX(-50%) translateZ(44px);
 }
 
-.avatar-body {
-  transform: translateX(-50%) translateZ(14px);
+.char-body {
+  transform: translateX(-50%) translateZ(18px);
 }
+
+.char-arm.left  { transform: translateZ(26px) rotate(8deg); }
+.char-arm.right { transform: translateZ(26px) rotate(-8deg); }
+
+.char-leg.left  { transform: translateZ(10px); }
+.char-leg.right { transform: translateZ(10px); }
 
 /* The excited nod keeps its 3D depth */
-@keyframes avatarNod {
-  0%   { transform: translateX(-50%) translateZ(46px) translateY(0); }
-  35%  { transform: translateX(-50%) translateZ(46px) translateY(-7px); }
-  70%  { transform: translateX(-50%) translateZ(46px) translateY(2px); }
-  100% { transform: translateX(-50%) translateZ(46px) translateY(0); }
+@keyframes charNod {
+  0%   { transform: translateX(-50%) translateZ(44px) translateY(0); }
+  35%  { transform: translateX(-50%) translateZ(44px) translateY(-7px); }
+  70%  { transform: translateX(-50%) translateZ(44px) translateY(2px); }
+  100% { transform: translateX(-50%) translateZ(44px) translateY(0); }
 }
 
-/* Gentle breathing float — transform-only, stays on the compositor */
-@keyframes avatarFloat {
+/* Gentle floating — transform-only, stays on the compositor */
+@keyframes charFloat {
   0%, 100% { transform: translateY(0) rotateZ(0deg); }
   50%      { transform: translateY(-7px) rotateZ(1deg); }
 }

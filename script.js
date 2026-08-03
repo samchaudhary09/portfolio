@@ -1030,17 +1030,11 @@ window.SITE_PROJECTS = PROJECTS;
           setButtonState('idle');
           showBanner(success, true);
           setTimeout(() => showBanner(success, false), 6000);
-          if (typeof window.islandStatus === 'function') {
-            window.islandStatus('✅ Message sent — I\'ll reply within 24h');
-          }
         })
         .catch(() => {
           setButtonState('idle');
           showBanner(error, true);
           setTimeout(() => showBanner(error, false), 8000);
-          if (typeof window.islandStatus === 'function') {
-            window.islandStatus('⚠️ Couldn\'t send — please try again');
-          }
         });
     });
   };
@@ -1069,9 +1063,6 @@ window.SITE_PROJECTS = PROJECTS;
       const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
       try { localStorage.setItem('sam-theme', next); } catch (err) { /* private mode */ }
       apply(next);
-      if (typeof window.islandStatus === 'function') {
-        window.islandStatus(next === 'light' ? '☀️ Light mode on' : '🌙 Dark mode on');
-      }
     });
   };
 
@@ -1108,9 +1099,6 @@ window.SITE_PROJECTS = PROJECTS;
     fab.addEventListener('click', () => {
       const opening = !card.classList.contains('open');
       openCard(opening);
-      if (opening && typeof window.islandStatus === 'function') {
-        window.islandStatus('💬 Chat connected to WhatsApp');
-      }
     });
 
     const closeBtn = document.getElementById('chat-close');
@@ -1159,9 +1147,6 @@ window.SITE_PROJECTS = PROJECTS;
       sendToWhatsApp(reply.dataset.text);
       addUserBubble(reply.dataset.text);
       addBotBubble(cfg.chatThanks || 'Thanks! Your message is on its way to my WhatsApp.');
-      if (typeof window.islandStatus === 'function') {
-        window.islandStatus('✈️ Sent — check WhatsApp');
-      }
     });
 
     /* Free-text query input → WhatsApp + bot acknowledgement */
@@ -1177,9 +1162,6 @@ window.SITE_PROJECTS = PROJECTS;
       input.value = '';
       input.focus();
       addBotBubble(cfg.chatThanks || 'Thanks! Your message is on its way to my WhatsApp.');
-      if (typeof window.islandStatus === 'function') {
-        window.islandStatus('✈️ Sent — check WhatsApp');
-      }
     };
 
     if (sendBtn) sendBtn.addEventListener('click', sendQuery);
@@ -1200,91 +1182,6 @@ window.SITE_PROJECTS = PROJECTS;
 
     const waBtn = document.getElementById('chat-whatsapp');
     if (waBtn) waBtn.href = `${wa}?text=${encodeURIComponent(cfg.whatsappGreeting || '')}`;
-  };
-
-  /* =========================================================================
-     19C. DYNAMIC ISLAND WIDGET — mini live-activity pill for iOS
-         Sits just below the notch / Dynamic Island, shows a live clock and
-         expands with a status message on key interactions.
-     ======================================================================== */
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-  const initIslandWidget = () => {
-    const widget = document.getElementById('island-widget');
-    if (!widget) return;
-
-    if (isIOS) document.documentElement.classList.add('ios');
-
-    const clock = document.getElementById('island-clock');
-    const dateEl = document.getElementById('island-date');
-    const msg = document.getElementById('island-msg');
-
-    const updateClock = () => {
-      if (!clock) return;
-      const now = new Date();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      clock.textContent = `${hh}:${mm}`;
-
-      /* "Tue · Aug 04" — refreshed daily, hidden on desktop */
-      if (dateEl) {
-        const day = now.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-        const month = now.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-        const dd = String(now.getDate()).padStart(2, '0');
-        dateEl.textContent = `${day} · ${month} ${dd}`;
-      }
-    };
-    updateClock();
-    setInterval(updateClock, 15000);
-
-    let hideTimer = null;
-
-    /* Collapse back to the mini camera+clock pill after a delay */
-    const collapseAfter = (ms) => {
-      clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => {
-        widget.classList.remove('active');
-        widget.classList.add('collapsed');
-      }, ms);
-    };
-
-    /* Expand the pill with a status message, then collapse to the mini pill */
-    const showStatus = (text, duration = 3200) => {
-      if (!msg) return;
-      widget.classList.remove('collapsed');
-      msg.textContent = text;
-      widget.classList.add('active');
-      collapseAfter(duration);
-    };
-
-    /* Intro: drops in right after the page loader, greets the visitor,
-       then collapses to the tiny camera+clock pill under the real notch */
-    setTimeout(() => widget.classList.add('entering'), 700);
-    setTimeout(() => showStatus('👋 Welcome to Sam.dev', 4200), 950);
-
-    /* Tap the island: collapsed → expand with status; expanded → toggle,
-       then it settles back to the mini pill on its own */
-    widget.addEventListener('click', () => {
-      if (widget.classList.contains('collapsed')) {
-        widget.classList.remove('collapsed');
-        msg.textContent = 'Open to work · replies in 24h';
-        widget.classList.add('active');
-        collapseAfter(6000);
-      } else {
-        widget.classList.toggle('active');
-        collapseAfter(5000);
-      }
-    });
-
-    /* Mouse users: collapse when the pointer leaves the pill */
-    widget.addEventListener('mouseleave', () => {
-      widget.classList.remove('active');
-      widget.classList.add('collapsed');
-    });
-
-    /* Global hook for other modules (theme toggle, bot, form) */
-    window.islandStatus = showStatus;
   };
 
   /* =========================================================================
@@ -1735,7 +1632,6 @@ window.SITE_PROJECTS = PROJECTS;
     initTimeline();
     initForm();
     initThemeToggle();
-    initIslandWidget();
     initBotWidget();
     initBackToTop();
     initCodeTabs();

@@ -89,26 +89,6 @@
     <span class="scroll-progress-bar"></span>
   </div>
 
-  <!-- Dynamic Island widget — mini "live activity" that sits below the iPhone notch -->
-  <div class="island-widget" id="island-widget">
-    <span class="island-camera" aria-hidden="true"></span>
-    <span class="island-date" id="island-date" aria-hidden="true"></span>
-    <span class="island-clock" id="island-clock">--:--</span>
-    <span class="island-sep" aria-hidden="true"></span>
-    <span class="island-msg" id="island-msg">Open to work · replies in 24h</span>
-    <span class="island-live" aria-hidden="true">
-      <span class="island-live-dot"></span>
-      <span class="island-live-txt">LIVE</span>
-    </span>
-    <span class="island-battery" aria-hidden="true">
-      <span class="island-batt-fill"></span>
-      <span class="island-batt-fill"></span>
-      <span class="island-batt-fill"></span>
-      <span class="island-batt-fill dim"></span>
-    </span>
-    <span class="island-dot" aria-hidden="true"></span>
-  </div>
-
   <!-- Page entrance overlay -->
   <div class="page-loader" aria-hidden="true">
     <span class="loader-text"><span data-dev-brand>Sam</span><span class="loader-dot">.</span>dev</span>
@@ -233,26 +213,33 @@
             <!-- Glass inner glow -->
             <div class="profile-glow" aria-hidden="true"></div>
 
-            <!-- Interactive CSS avatar — eyes follow your cursor, he blinks,
-                 and clicking him pops a reaction bubble -->
-            <div class="avatar" id="avatar" role="img" aria-label="Cartoon avatar of Sumeet — click for a reaction">
-              <div class="avatar-inner">
-                <div class="avatar-bust">
-                  <div class="avatar-head">
-                    <div class="avatar-face">
-                      <span class="avatar-brow left"></span>
-                      <span class="avatar-brow right"></span>
-                      <span class="avatar-eye left"><span class="pupil"></span></span>
-                      <span class="avatar-eye right"><span class="pupil"></span></span>
-                      <span class="avatar-nose"></span>
-                      <span class="avatar-blush left"></span>
-                      <span class="avatar-blush right"></span>
-                      <span class="avatar-smile"></span>
+            <!-- Interactive 3D character — a pure-CSS robot dev. His head,
+                 body and limbs sit on real 3D layers: he tilts toward your
+                 cursor, his eyes track you, he blinks, and clicking him
+                 makes him wave + pop a speech bubble -->
+            <div class="avatar" id="avatar" role="img" aria-label="Interactive 3D robot character of Sumeet — click to make it wave">
+              <div class="char-scene">
+                <div class="char-bot">
+                  <div class="char-head">
+                    <span class="char-antenna"><span class="char-antenna-light" aria-hidden="true"></span></span>
+                    <span class="char-ear left" aria-hidden="true"></span>
+                    <span class="char-ear right" aria-hidden="true"></span>
+                    <div class="char-face">
+                      <span class="char-eye left"><span class="pupil"></span></span>
+                      <span class="char-eye right"><span class="pupil"></span></span>
+                      <span class="char-smile" aria-hidden="true"></span>
                     </div>
                   </div>
-                  <div class="avatar-body"></div>
+                  <div class="char-neck" aria-hidden="true"></div>
+                  <div class="char-body">
+                    <span class="char-core" aria-hidden="true"></span>
+                    <div class="char-arm left" aria-hidden="true"><span class="char-hand"></span></div>
+                    <div class="char-arm right" aria-hidden="true"><span class="char-hand"></span></div>
+                  </div>
+                  <div class="char-leg left" aria-hidden="true"></div>
+                  <div class="char-leg right" aria-hidden="true"></div>
                 </div>
-                <div class="avatar-shadow"></div>
+                <div class="char-shadow" aria-hidden="true"></div>
               </div>
               <span class="avatar-bubble" id="avatar-bubble" aria-hidden="true">Hi there! 👋</span>
             </div>

@@ -5230,3 +5230,106 @@ html[data-theme="light"] .logo-text {
     animation: none;
   }
 }
+
+/* ==========================================================================
+   32. MOTION & PERFORMANCE — buttery scrolling at 60/90/100/120Hz
+   --------------------------------------------------------------------------
+   Rules in this section only remove or lighten work the GPU/renderer is
+   doing — never visual layout. rAF-driven scroll code adapts to any refresh
+   rate automatically; the biggest phone jank sources are per-frame paint
+   (background-position & filter animations) and backdrop-filter on many
+   elements, which are disabled/reduced below.
+   ========================================================================== */
+
+/* --- 32a. Skip heavy repaint animations on phones ---
+   background-position + filter animations force a repaint every frame and
+   eat the frame budget on mobile GPUs. Their static gradient still renders,
+   so the look is preserved but the scroll stays on the compositor. */
+@media (max-width: 768px) {
+  .layer-stars,
+  .layer-cubes::before,
+  .layer-cubes::after,
+  .layer-glass::before,
+  .layer-glass::after,
+  .layer-waves,
+  .profile-glow,
+  .profile-card::before,
+  .avatar-inner::before,
+  .btn-primary,
+  .typed-text,
+  .hero-stat-num,
+  .loader-text,
+  .badge-pulse::after,
+  .float-icon {
+    animation: none;
+  }
+
+  /* Reduce backdrop blur on mobile — each blurred layer costs a full-screen
+     GPU pass per frame; lighter blur keeps the glass look without the tax */
+  .navbar.scrolled {
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+
+  .glass-card {
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+  }
+
+  .profile-card {
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+  }
+
+  .island-widget {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+
+  /* Compose transforms cheaply on phones too */
+  .hero-content,
+  .hero-visual,
+  .profile-card,
+  .avatar-inner {
+    will-change: transform;
+  }
+}
+
+/* --- 32b. Long-page rendering: skip off-screen sections (all viewports) ---
+   content-visibility stops layout/paint for sections far below the fold —
+   a huge win on long pages, safe with anchor links & scroll-spy. */
+.section:not(.hero):not(.page-hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+/* --- 32c. Final mobile link/alignment polish --- */
+@media (max-width: 768px) {
+  .footer-social {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .page-hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .page-hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-actions .btn {
+    padding: 12px 10px;
+    font-size: 0.88rem;
+  }
+
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 7px 12px;
+  }
+}

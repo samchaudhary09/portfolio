@@ -22,8 +22,8 @@ const DEVELOPER_CONFIG = {
   email: 'sumeetchaudhary928@gmail.com',
   phone: '+91 9119700775',
   website: 'https://samchaudhary09.github.io/portfolio/',
-  github: 'https://github.com/yourusername',
-  linkedin: 'https://linkedin.com/in/yourusername',
+  github: 'https://github.com/samchaudhary09',
+  linkedin: 'https://www.linkedin.com/public-profile/settings/?trk=d_flagship3_profile_self_view_public_profile&lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BEjDYgmsxTnaHB2bAWmehEg%3D%3D',
   experience: '2+ Years',
   education: 'BCA — Bachelor of Computer Applications',
   languages: 'English, Hindi',
@@ -284,19 +284,25 @@ window.SITE_PROJECTS = PROJECTS;
   /* =========================================================================
      1. PAGE LOADER — entrance animation
      ======================================================================== */
-  window.addEventListener('load', () => {
+  const revealHero = () => {
+    document.body.classList.add('loaded');
+    document.querySelectorAll('.hero .fade-up:not(.in-view)').forEach((el, i) => {
+      setTimeout(() => el.classList.add('in-view'), 120 + i * 120);
+    });
+  };
+
+  const hideLoader = () => {
     const loader = document.querySelector('.page-loader');
-    if (loader) {
-      setTimeout(() => {
-        loader.classList.add('hidden');
-        document.body.classList.add('loaded');
-        // Start entrance reveal of hero elements
-        document.querySelectorAll('.hero .fade-up').forEach((el, i) => {
-          setTimeout(() => el.classList.add('in-view'), 120 + i * 120);
-        });
-      }, 650);
-    }
-  });
+    if (!loader || loader.classList.contains('hidden')) return;
+    loader.classList.add('hidden');
+    revealHero();
+  };
+
+  window.addEventListener('load', () => setTimeout(hideLoader, 650));
+
+  /* Failsafe — on slow mobile connections `load` can lag for seconds; the
+     loader must never trap the page (it blocks all taps while visible). */
+  setTimeout(hideLoader, 3000);
 
   /* =========================================================================
      2. PARTICLE CANVAS — animated floating dots
@@ -312,7 +318,9 @@ window.SITE_PROJECTS = PROJECTS;
     let rafId = null;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      /* Cap DPR harder on phones — 1.5× is visually identical on small
+         screens and costs a lot less fill-rate (helps 120Hz iPhones) */
+      const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 2);
       width = canvas.clientWidth;
       height = canvas.clientHeight;
       canvas.width = width * dpr;
@@ -347,8 +355,10 @@ window.SITE_PROJECTS = PROJECTS;
 
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8;
+        /* shadowBlur is the single most expensive canvas op — drop it on
+           touch so the rAF loop keeps a solid frame budget */
+        if (!isTouch) ctx.shadowColor = p.color;
+        ctx.shadowBlur = isTouch ? 0 : 8;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
@@ -610,10 +620,15 @@ window.SITE_PROJECTS = PROJECTS;
       });
     };
 
-    window.addEventListener('scroll', () => {
-      scrollY = window.scrollY;
-      onFrame(render);
-    }, { passive: true });
+    /* Scroll + mouse parallax: desktop only. On touch, JS transforms written
+       per scroll frame fight the native momentum scroll and cause jank —
+       phones keep layers static so scrolling stays 100% compositor-driven. */
+    if (!isTouch) {
+      window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+        onFrame(render);
+      }, { passive: true });
+    }
 
     /* Mouse-driven parallax (desktop only) */
     if (!isTouch) {
@@ -624,23 +639,25 @@ window.SITE_PROJECTS = PROJECTS;
       });
     }
 
-    /* Hero content micro-parallax */
-    const heroContent = document.querySelector('.hero-content');
-    const heroVisual = document.querySelector('.hero-visual');
-    if (heroContent && heroVisual) {
-      const heroRender = () => {
-        const heroEl = document.getElementById('home');
-        if (!heroEl) return;
-        const rect = heroEl.getBoundingClientRect();
-        const center = rect.top + rect.height / 2 - window.innerHeight / 2;
-        const offset = clamp(-center / rect.height, -0.35, 0.35);
+    /* Hero content micro-parallax (desktop only — same reasoning) */
+    if (!isTouch) {
+      const heroContent = document.querySelector('.hero-content');
+      const heroVisual = document.querySelector('.hero-visual');
+      if (heroContent && heroVisual) {
+        const heroRender = () => {
+          const heroEl = document.getElementById('home');
+          if (!heroEl) return;
+          const rect = heroEl.getBoundingClientRect();
+          const center = rect.top + rect.height / 2 - window.innerHeight / 2;
+          const offset = clamp(-center / rect.height, -0.35, 0.35);
 
-        /* Text moves up faster than the visual → depth illusion */
-        heroContent.style.transform = `translateY(${offset * 60}px)`;
-        heroVisual.style.transform = `translateY(${offset * 30}px)`;
-      };
-      window.addEventListener('scroll', () => onFrame(heroRender), { passive: true });
-      onFrame(heroRender);
+          /* Text moves up faster than the visual → depth illusion */
+          heroContent.style.transform = `translateY(${offset * 60}px)`;
+          heroVisual.style.transform = `translateY(${offset * 30}px)`;
+        };
+        window.addEventListener('scroll', () => onFrame(heroRender), { passive: true });
+        onFrame(heroRender);
+      }
     }
 
     render();
@@ -1547,11 +1564,27 @@ window.SITE_PROJECTS = PROJECTS;
         });
       };
 
-      /* HEAD request → if the PDF exists use it, otherwise use the DOCX */
+      /* HEAD request → if the PDF exists use it, otherwise try the DOCX.
+         If neither exists the buttons stay on '#' and the placeholder
+         guard below keeps them from jumping the page to the top. */
+      const tryDocx = () =>
+        fetch(cfg.resumeDOCX, { method: 'HEAD' })
+          .then((res) => applyHref(res.ok ? cfg.resumeDOCX : '#'))
+          .catch(() => applyHref('#'));
+
       fetch(cfg.resumePDF, { method: 'HEAD' })
-        .then((res) => applyHref(res.ok ? cfg.resumePDF : cfg.resumeDOCX))
-        .catch(() => applyHref(cfg.resumeDOCX));
+        .then((res) => (res.ok ? applyHref(cfg.resumePDF) : tryDocx()))
+        .catch(tryDocx);
     }
+
+    /* --- Placeholder links (href="#"): never jump the page to the top ---
+       Project demo/github buttons and any link whose real URL isn't ready
+       yet become inert instead of scrolling the visitor away. Re-checked at
+       click time so links that later receive a real href still work. */
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href="#"]');
+      if (link) e.preventDefault();
+    });
   };
 
   /* =========================================================================

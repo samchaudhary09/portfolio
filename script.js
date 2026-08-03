@@ -21,7 +21,7 @@ const DEVELOPER_CONFIG = {
   location: 'Dehradun, Uttarakhand, India',
   email: 'sumeetchaudhary928@gmail.com',
   phone: '+91 9119700775',
-  website: 'https://yourdomain.com',
+  website: 'https://samchaudhary09.github.io/portfolio/',
   github: 'https://github.com/yourusername',
   linkedin: 'https://linkedin.com/in/yourusername',
   experience: '2+ Years',

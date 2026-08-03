@@ -298,7 +298,13 @@ window.SITE_PROJECTS = PROJECTS;
     revealHero();
   };
 
-  window.addEventListener('load', () => setTimeout(hideLoader, 650));
+  /* If the page already finished loading (cache hits) the loader never
+     gets a chance to block taps — hide it instantly. */
+  if (document.readyState === 'complete') {
+    hideLoader();
+  } else {
+    window.addEventListener('load', () => setTimeout(hideLoader, 650));
+  }
 
   /* Failsafe — on slow mobile connections `load` can lag for seconds; the
      loader must never trap the page (it blocks all taps while visible). */
@@ -311,6 +317,7 @@ window.SITE_PROJECTS = PROJECTS;
     const canvas = document.getElementById('particles-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
     const colors = ['#7B61FF', '#00D4FF', '#FF5F6D', '#FFC371', '#14F195'];
 
     let width, height, particles = [];
@@ -1346,26 +1353,6 @@ window.SITE_PROJECTS = PROJECTS;
   };
 
   /* =========================================================================
-     20. BACK TO TOP FAB
-     ======================================================================== */
-  const initBackToTop = () => {
-    const fab = document.getElementById('back-to-top');
-    if (!fab) return;
-
-    const onScroll = () => {
-      fab.classList.toggle('visible', window.scrollY > 600);
-    };
-
-    window.addEventListener('scroll', () => onFrame(onScroll), { passive: true });
-
-    fab.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    onScroll();
-  };
-
-  /* =========================================================================
      20. DEVELOPER DATA — renders every dynamic value from DEVELOPER_CONFIG
          Covers: text, links, logos, stats, resume buttons, SEO meta, JSON-LD
      ======================================================================== */
@@ -1613,31 +1600,41 @@ window.SITE_PROJECTS = PROJECTS;
   /* =========================================================================
      BOOT — init everything when the DOM is ready
      ======================================================================== */
+
+  /* Each init is isolated: a single failure can never take down the rest
+     (menu, theme, chat bot etc. must always bind, even on odd browsers). */
+  const run = (fn) => {
+    try {
+      fn();
+    } catch (err) {
+      console.error('[init]', fn.name, err);
+    }
+  };
+
   const init = () => {
-    initDeveloperData();   /* must run first so rendered nodes exist below */
-    initProjectPage();     /* overrides the document title on project.html */
-    initParticles();
-    initCursor();
-    initScrollUI();
-    initMenu();
-    initTyping();
-    initScrollSpy();
-    initReveals();
-    initParallax();
-    initTilt();
-    initMagnetic();
-    initRipple();
-    initCounters();
-    initSkillBars();
-    initTimeline();
-    initForm();
-    initThemeToggle();
-    initBotWidget();
-    initBackToTop();
-    initCodeTabs();
-    initSmoothScroll();
-    initAvatar();
-    initISTClock();
+    run(initDeveloperData);   /* must run first so rendered nodes exist below */
+    run(initProjectPage);     /* overrides the document title on project.html */
+    run(initParticles);
+    run(initCursor);
+    run(initScrollUI);
+    run(initMenu);
+    run(initTyping);
+    run(initScrollSpy);
+    run(initReveals);
+    run(initParallax);
+    run(initTilt);
+    run(initMagnetic);
+    run(initRipple);
+    run(initCounters);
+    run(initSkillBars);
+    run(initTimeline);
+    run(initForm);
+    run(initThemeToggle);
+    run(initBotWidget);
+    run(initCodeTabs);
+    run(initSmoothScroll);
+    run(initAvatar);
+    run(initISTClock);
   };
 
   if (document.readyState === 'loading') {

@@ -213,26 +213,31 @@
             <!-- Glass inner glow -->
             <div class="profile-glow" aria-hidden="true"></div>
 
-            <!-- Interactive 3D character — a pure-CSS robot dev. His head,
-                 body and limbs sit on real 3D layers: he tilts toward your
-                 cursor, his eyes track you, he blinks, and clicking him
-                 makes him wave + pop a speech bubble -->
-            <div class="avatar" id="avatar" role="img" aria-label="Interactive 3D robot character of Sumeet — click to make it wave">
+            <!-- Interactive 3D character — a pure-CSS boy with a beard
+                 (a playful dev portrait). His head, body and limbs sit on
+                 real 3D layers: he tilts toward your cursor, his eyes
+                 track you, he blinks, and clicking him makes him wave +
+                 pop a speech bubble -->
+            <div class="avatar" id="avatar" role="img" aria-label="Interactive 3D character of Sumeet — click to make it wave">
               <div class="char-scene">
                 <div class="char-bot">
                   <div class="char-head">
-                    <span class="char-antenna"><span class="char-antenna-light" aria-hidden="true"></span></span>
                     <span class="char-ear left" aria-hidden="true"></span>
                     <span class="char-ear right" aria-hidden="true"></span>
                     <div class="char-face">
+                      <span class="char-brow left" aria-hidden="true"></span>
+                      <span class="char-brow right" aria-hidden="true"></span>
                       <span class="char-eye left"><span class="pupil"></span></span>
                       <span class="char-eye right"><span class="pupil"></span></span>
                       <span class="char-smile" aria-hidden="true"></span>
+                      <span class="char-beard" aria-hidden="true"></span>
+                      <span class="char-blush left" aria-hidden="true"></span>
+                      <span class="char-blush right" aria-hidden="true"></span>
                     </div>
                   </div>
                   <div class="char-neck" aria-hidden="true"></div>
                   <div class="char-body">
-                    <span class="char-core" aria-hidden="true"></span>
+                    <span class="char-badge" aria-hidden="true">S</span>
                     <div class="char-arm left" aria-hidden="true"><span class="char-hand"></span></div>
                     <div class="char-arm right" aria-hidden="true"><span class="char-hand"></span></div>
                   </div>
@@ -869,8 +874,8 @@
           </ul>
         </div>
 
-        <!-- Right: browser mockup -->
-        <div class="browser-window glass-card fade-up">
+        <!-- Right: browser mockup — animates a website being created -->
+        <div class="browser-window glass-card fade-up" aria-label="Animation of a website being built">
           <div class="browser-bar">
             <span class="code-dots" aria-hidden="true">
               <span class="dot red"></span>
@@ -878,7 +883,13 @@
               <span class="dot green"></span>
             </span>
             <span class="browser-url">https://samchaudhary09.github.io/portfolio/</span>
+            <span class="browser-status" aria-hidden="true">
+              <span class="browser-status-dot"></span>
+              <span class="st-build">Building…</span>
+              <span class="st-done">Deployed ✓</span>
+            </span>
           </div>
+          <div class="browser-progress" aria-hidden="true"><span class="browser-progress-bar"></span></div>
           <div class="browser-body">
             <div class="browser-nav">
               <span class="browser-logo"></span>
@@ -893,11 +904,13 @@
                 <span class="browser-line w60"></span>
                 <span class="browser-line w45"></span>
                 <span class="browser-pill"></span>
+                <span class="browser-cursor" aria-hidden="true"></span>
               </div>
               <div class="browser-visual">
                 <span class="browser-shape s1"></span>
                 <span class="browser-shape s2"></span>
                 <span class="browser-shape s3"></span>
+                <span class="browser-check" aria-hidden="true">✓</span>
               </div>
             </div>
             <div class="browser-cards">
@@ -1678,11 +1691,6 @@
 
     </div>
   </footer>
-
-  <!-- Floating back-to-top button -->
-  <button class="back-to-top-fab" id="back-to-top" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
-  </button>
 
   <!-- ============================================================
        CHAT BOT — floating widget with quick contact actions

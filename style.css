@@ -1003,7 +1003,7 @@ ul {
   to   { opacity: 1;   transform: translateX(-50%) scale(1.15); }
 }
 
-/* ---- Interactive 3D character (pure-CSS robot dev) ---- */
+/* ---- Interactive 3D mascot (pure-CSS Memoji-style software engineer) ---- */
 .avatar {
   position: relative;
   z-index: 2;
@@ -1024,87 +1024,98 @@ ul {
   transform-style: preserve-3d;
 }
 
-/* Hoodie hood — a rounded band peeking up behind the head (Memoji vibe) */
+/* Hoodie hood — a white band peeking up behind the head (Memoji vibe) */
 .char-hood {
   position: absolute;
   top: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 166px;
+  width: 170px;
   height: 78px;
-  border-radius: 50% 50% 28px 28px / 42px 42px 28px 28px;
-  background: linear-gradient(180deg, #7a5cf0 0%, #5638c2 85%);
-  border: 2px solid rgba(255, 255, 255, 0.16);
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 10px 26px rgba(0, 0, 0, 0.3);
+  border-radius: 50% 50% 30px 30px / 44px 44px 30px 30px;
+  background: linear-gradient(180deg, #ffffff 0%, #dcdce2 85%);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.7), 0 10px 26px rgba(0, 0, 0, 0.3);
   z-index: 0;
 }
 
-/* Head — big Memoji-style rounded head */
+/* Head — big rounded Memoji head with fair-warm skin */
 .char-head {
   position: absolute;
   top: 0;
   left: 50%;
   width: 150px;
   height: 138px;
-  border-radius: 44px 44px 40px 40px;
-  background: linear-gradient(165deg, #f2c4a0 0%, #d9a06b 60%, #c08a57 100%);
-  border: 2px solid rgba(123, 97, 255, 0.3);
+  border-radius: 46px 46px 42px 42px;
+  background: linear-gradient(165deg, #fbe3c8 0%, #f2c39d 58%, #e2a97c 100%);
+  border: 1.5px solid rgba(160, 110, 70, 0.25);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -3px 8px rgba(90, 50, 20, 0.22),
-    0 18px 40px rgba(0, 0, 0, 0.45),
-    0 0 26px rgba(123, 97, 255, 0.16);
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -3px 8px rgba(120, 70, 30, 0.2),
+    0 18px 40px rgba(0, 0, 0, 0.45);
   transform-style: preserve-3d;
   z-index: 1;
+  animation: charFloat 5.5s ease-in-out infinite;
 }
 
-/* Hair — full fringe cap with side tufts */
-.char-head::before {
+/* Hair — jet-black quiff cap that fades at the temples */
+.char-hair {
+  position: absolute;
+  top: -4px;
+  left: -6px;
+  z-index: 3;
+  width: 162px;
+  height: 74px;
+  border-radius: 56px 56px 34px 34px / 64px 64px 26px 26px;
+  background: linear-gradient(180deg, #232328 0%, #0d0d10 78%);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.16),
+    0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Quiff — the raised front spike */
+.char-hair::before {
   content: '';
   position: absolute;
-  top: -3px;
-  left: -4px;
-  z-index: 2;
-  width: 158px;
-  height: 74px;
-  border-radius: 48px 48px 24px 24px;
-  background: linear-gradient(180deg, #2c3a63 0%, #0e1526 82%);
-  box-shadow:
-    inset 0 2px 3px rgba(255, 255, 255, 0.14),
-    0 4px 10px rgba(0, 0, 0, 0.35),
-    -13px 16px 0 -10px #0e1526,
-    13px 16px 0 -10px #0e1526;
+  top: -15px;
+  left: 50%;
+  width: 46px;
+  height: 30px;
+  border-radius: 50% 50% 36% 36%;
+  background: linear-gradient(180deg, #1c1c21, #0b0b0e);
+  transform: translateX(-50%) rotate(-5deg);
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.12);
 }
 
 /* Hair shine */
-.char-head::after {
+.char-hair::after {
   content: '';
   position: absolute;
-  top: 8px;
-  left: 24px;
-  z-index: 3;
-  width: 42px;
+  top: 9px;
+  left: 26px;
+  width: 44px;
   height: 11px;
   border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent);
   filter: blur(1.5px);
 }
 
-/* Side ears */
+/* Side ears — fair skin */
 .char-ear {
   position: absolute;
-  top: 62px;
+  top: 58px;
   width: 16px;
   height: 30px;
   border-radius: 8px;
-  background: linear-gradient(180deg, #e2ac7c, #b9825a);
-  border: 1px solid rgba(123, 97, 255, 0.25);
+  background: linear-gradient(180deg, #f3cfae, #d9a276);
+  border: 1px solid rgba(160, 110, 70, 0.3);
+  z-index: 2;
 }
 
 .char-ear.left  { left: -7px; }
 .char-ear.right { right: -7px; }
 
-/* Face — soft skin region that anchors the features */
+/* Face — soft fair-skin region that anchors the features */
 .char-face {
   position: absolute;
   top: 46px;
@@ -1112,50 +1123,63 @@ ul {
   transform: translateX(-50%);
   width: 100px;
   height: 88px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, #eec19a, #d9a06b);
-  box-shadow: inset 0 -10px 24px rgba(120, 70, 30, 0.14);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #f8d8ba, #efbe95);
+  box-shadow: inset 0 -10px 24px rgba(150, 90, 40, 0.12);
+  z-index: 1;
 }
 
-/* Eyebrows */
+/* Eyebrows — dark, softly angled */
 .char-brow {
   position: absolute;
-  top: 6px;
+  top: 8px;
   width: 20px;
   height: 5px;
   border-radius: 4px;
-  background: #241a2e;
+  background: #1b1916;
+  z-index: 4;
 }
 
 .char-brow.left  { left: 16px; transform: rotate(-8deg); }
 .char-brow.right { right: 16px; transform: rotate(8deg); }
 
-/* Eyes — big white sclera with dark pupils that follow the cursor */
+/* Eyes — white sclera, brown iris, cursor-tracking pupil */
 .char-eye {
   position: absolute;
   top: 20px;
   width: 22px;
   height: 24px;
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #ffffff, #dfe4ee 70%);
-  border: 1.5px solid rgba(70, 40, 20, 0.35);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.18);
+  background: radial-gradient(circle at 40% 35%, #ffffff, #e6eaf2 70%);
+  border: 1.5px solid rgba(90, 50, 20, 0.3);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16);
   display: grid;
   place-items: center;
+  z-index: 3;
   animation: eyeBlink 4.6s ease-in-out infinite;
 }
 
 .char-eye.left  { left: 13px; }
 .char-eye.right { right: 13px; }
 
+.char-iris {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #8a6034 0%, #4a2f15 68%, #2e1c0c 100%);
+  box-shadow: inset 0 0 0 2px rgba(120, 80, 40, 0.35), 0 1px 2px rgba(0, 0, 0, 0.4);
+  display: grid;
+  place-items: center;
+}
+
 .pupil {
   display: block;
   position: relative;
-  width: 8px;
-  height: 9px;
+  width: 5.5px;
+  height: 6.5px;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%, #4a3be8 0%, #241208 75%);
-  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.6);
+  background: radial-gradient(circle at 38% 32%, #241a10 0%, #0c0905 78%);
   transform: translate(calc(var(--look-x) * 5px), calc(var(--look-y) * 4px));
   transition: transform 0.12s ease-out;
 }
@@ -1176,146 +1200,201 @@ ul {
   95%           { transform: scaleY(0.12); }
 }
 
-/* Nose — soft shadow ellipse */
+/* Nose — soft fair shadow, sits above the mustache */
 .char-nose {
   position: absolute;
-  top: 40px;
+  top: 36px;
   left: 50%;
   transform: translateX(-50%);
-  width: 12px;
-  height: 15px;
+  width: 13px;
+  height: 16px;
   border-radius: 50%;
-  background: linear-gradient(180deg, rgba(160, 100, 60, 0.35), transparent 72%);
+  background: linear-gradient(180deg, rgba(180, 120, 70, 0.4), transparent 72%);
+  z-index: 2;
 }
 
-/* Mouth — a warm open smile sitting on the beard */
-.char-smile {
+/* Mustache — full, connected into the beard */
+.char-mustache {
   position: absolute;
-  top: 52px;
+  top: 42px;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
-  height: 9px;
-  border-radius: 0 0 10px 10px;
-  background: rgba(15, 8, 4, 0.85);
-  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.4);
+  width: 48px;
+  height: 13px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #1a1710, #0b0906);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  z-index: 2;
 }
 
-/* Beard — full rounded beard over the jaw */
+.char-mustache::before,
+.char-mustache::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  width: 16px;
+  height: 8px;
+  border-radius: 999px;
+  background: #14110b;
+}
+
+.char-mustache::before { left: -10px; transform: rotate(12deg); }
+.char-mustache::after  { right: -10px; transform: rotate(-12deg); }
+
+/* Mouth — wide open smile with a white teeth row */
+.char-mouth {
+  position: absolute;
+  top: 54px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 14px;
+  border-radius: 0 0 18px 18px;
+  background: linear-gradient(180deg, #4a2413, #2a1309);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  z-index: 3;
+}
+
+.char-teeth {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 6px;
+  border-radius: 0 0 6px 6px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* Beard — full jet-black beard wrapping the jaw and chin */
 .char-beard {
   position: absolute;
-  top: 48px;
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
-  width: 86px;
-  height: 40px;
-  border-radius: 0 0 34px 34px;
-  background: linear-gradient(180deg, #241a10, #140d06);
+  width: 96px;
+  height: 54px;
+  border-radius: 0 0 40px 40px;
+  background: linear-gradient(180deg, #16130d 0%, #0a0805 100%);
   box-shadow:
-    inset 0 3px 4px rgba(255, 255, 255, 0.07),
-    0 6px 12px rgba(0, 0, 0, 0.3);
+    inset 0 3px 4px rgba(255, 255, 255, 0.06),
+    0 6px 12px rgba(0, 0, 0, 0.3),
+    -18px 10px 0 -14px #0d0b07,
+    18px 10px 0 -14px #0d0b07;
 }
 
 /* Soft blush */
 .char-blush {
   position: absolute;
-  top: 42px;
+  top: 40px;
   width: 10px;
   height: 6px;
   border-radius: 999px;
-  background: rgba(255, 120, 120, 0.45);
+  background: rgba(255, 120, 110, 0.4);
+  z-index: 2;
 }
 
-.char-blush.left  { left: 4px; }
-.char-blush.right { right: 4px; }
+.char-blush.left  { left: 6px; }
+.char-blush.right { right: 6px; }
 
-/* Neck — skin tone */
+/* Neck — fair skin */
 .char-neck {
   position: absolute;
-  top: 134px;
+  top: 132px;
   left: 50%;
   transform: translateX(-50%);
-  width: 24px;
-  height: 16px;
+  width: 26px;
+  height: 14px;
   border-radius: 6px;
-  background: linear-gradient(180deg, #d9a06b, #b07a4a);
-  border: 1px solid rgba(123, 97, 255, 0.25);
+  background: linear-gradient(180deg, #efc19b, #d39d6f);
+  border: 1px solid rgba(160, 110, 70, 0.25);
 }
 
-/* Body — purple hoodie with a white collar */
+/* Body — white zip hoodie over a black crew T-shirt */
 .char-body {
   position: absolute;
-  top: 146px;
+  top: 144px;
   left: 50%;
-  width: 120px;
-  height: 88px;
-  border-radius: 30px 30px 22px 22px;
-  background: linear-gradient(160deg, #8b6dff 0%, #6a4de0 55%, #5638c2 100%);
-  border: 2px solid rgba(255, 255, 255, 0.22);
+  width: 122px;
+  height: 92px;
+  border-radius: 30px 30px 20px 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #ececf0 55%, #d8d8de 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.25),
-    0 14px 34px rgba(0, 0, 0, 0.4),
-    0 0 22px rgba(123, 97, 255, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 6px rgba(90, 90, 110, 0.18),
+    0 14px 34px rgba(0, 0, 0, 0.4);
   transform-style: preserve-3d;
+  animation: charBreath 4.2s ease-in-out infinite;
 }
 
-/* Hoodie collar */
-.char-body::before {
+/* Black crew-neck T-shirt visible inside the open zip */
+.char-tshirt {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46px;
+  height: 24px;
+  background: linear-gradient(180deg, #22242a, #14161b);
+  clip-path: polygon(0 0, 100% 0, 76% 100%, 24% 100%);
+  z-index: 2;
+}
+
+/* Metal zipper down the middle */
+.char-zip {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 80px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #c2c7cf, #8f959e);
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+  z-index: 3;
+}
+
+.char-zip::after {
   content: '';
   position: absolute;
-  top: 0;
+  bottom: -7px;
   left: 50%;
   transform: translateX(-50%);
-  width: 36px;
-  height: 18px;
-  background: linear-gradient(180deg, #ffffff, #d4d4e6);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  width: 8px;
+  height: 10px;
+  border-radius: 2px 2px 3px 3px;
+  background: linear-gradient(180deg, #b9bec6, #878d96);
 }
 
-/* Chest badge — a little "S" monogram */
-.char-badge {
+/* Grey hoodie drawstrings hanging from the neckline */
+.char-string {
   position: absolute;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  font-family: var(--font-display);
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  top: -4px;
+  width: 3.5px;
+  height: 26px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #a4abb4, #7c838c);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  transform-origin: top center;
+  z-index: 2;
 }
 
-/* Kangaroo pocket */
-.char-pocket {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 54px;
-  height: 20px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(255, 255, 255, 0.28);
-}
+.char-string.left  { left: calc(50% - 12px); transform: rotate(7deg); }
+.char-string.right { right: calc(50% - 8px); transform: rotate(-7deg); }
 
-/* Arms — hoodie sleeves with skin-tone hands */
+/* Arms — white hoodie sleeves with fair-skin hands */
 .char-arm {
   position: absolute;
-  top: 138px;
+  top: 136px;
   width: 22px;
   height: 62px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #6a4de0, #4a31ad);
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 14px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(180deg, #f4f4f8, #c7c7ce);
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 6px 14px rgba(0, 0, 0, 0.32);
   transform-origin: top center;
   transform-style: preserve-3d;
 }
@@ -1331,25 +1410,39 @@ ul {
   width: 19px;
   height: 19px;
   border-radius: 50%;
-  background: linear-gradient(160deg, #e8b88c, #c98f5e);
-  border: 1.5px solid rgba(123, 97, 255, 0.3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  background: linear-gradient(160deg, #f8d9bb, #e0ab80);
+  border: 1.5px solid rgba(160, 110, 70, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-/* Legs — jeans */
+/* Legs — dark jeans */
 .char-leg {
   position: absolute;
   top: 230px;
-  width: 24px;
-  height: 40px;
+  width: 26px;
+  height: 36px;
   border-radius: 10px 10px 8px 8px;
-  background: linear-gradient(180deg, #33406e, #222c4e);
-  border: 1.5px solid rgba(255, 255, 255, 0.16);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, #2c3554, #1a2138);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .char-leg.left  { left: 42px; }
 .char-leg.right { right: 42px; }
+
+/* White sneakers */
+.char-leg::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 10px;
+  border-radius: 5px 7px 8px 8px;
+  background: linear-gradient(180deg, #ffffff, #dcdce1);
+  box-shadow: 0 2px 0 #9aa0a9, 0 4px 8px rgba(0, 0, 0, 0.25);
+}
 
 /* Ground shadow */
 .char-shadow {
@@ -1368,6 +1461,18 @@ ul {
 @keyframes charShadow {
   0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
   50%      { transform: translateX(-50%) scale(0.82); opacity: 0.32; }
+}
+
+/* Micro-motion: gentle chest breathing (keeps the 3D body transform) */
+@keyframes charBreath {
+  0%, 100% { transform: translateX(-50%) translateZ(18px) scaleY(1) scaleX(1); }
+  50%      { transform: translateX(-50%) translateZ(18px) scaleY(1.028) scaleX(1.012); }
+}
+
+/* Micro-motion: subtle head bob (keeps the 3D head transform) */
+@keyframes charFloat {
+  0%, 100% { transform: translateX(-50%) translateZ(44px) translateY(0); }
+  50%      { transform: translateX(-50%) translateZ(44px) translateY(-3px); }
 }
 
 /* Card text */
@@ -2978,36 +3083,36 @@ a.info-card-value:hover {
   opacity: 0;
 }
 
-.browser-window.in-view .browser-nav > * { animation: browserPop 6.4s ease backwards; }
+.browser-window.in-view .browser-nav > * { animation: browserPop 6.4s ease infinite backwards; }
 .browser-window.in-view .browser-nav > *:nth-child(1) { animation-delay: 0.4s; }
 .browser-window.in-view .browser-nav > *:nth-child(2) { animation-delay: 0.55s; }
 .browser-window.in-view .browser-nav > *:nth-child(3) { animation-delay: 0.7s; }
 .browser-window.in-view .browser-nav > *:nth-child(4) { animation-delay: 0.85s; }
 .browser-window.in-view .browser-nav > *:nth-child(5) { animation-delay: 1s; }
 
-.browser-window.in-view .browser-hero { animation: browserPop 6.4s ease 1.2s backwards; }
+.browser-window.in-view .browser-hero { animation: browserPop 6.4s ease 1.2s infinite backwards; }
 
-.browser-window.in-view .browser-visual .browser-shape:nth-child(1) { animation: browserPop 6.4s ease 1.5s backwards; }
-.browser-window.in-view .browser-visual .browser-shape:nth-child(2) { animation: browserPop 6.4s ease 1.65s backwards; }
-.browser-window.in-view .browser-visual .browser-shape:nth-child(3) { animation: browserPop 6.4s ease 1.8s backwards; }
+.browser-window.in-view .browser-visual .browser-shape:nth-child(1) { animation: browserPop 6.4s ease 1.5s infinite backwards; }
+.browser-window.in-view .browser-visual .browser-shape:nth-child(2) { animation: browserPop 6.4s ease 1.65s infinite backwards; }
+.browser-window.in-view .browser-visual .browser-shape:nth-child(3) { animation: browserPop 6.4s ease 1.8s infinite backwards; }
 
-.browser-window.in-view .browser-hero-text .browser-line:nth-child(1) { animation: browserPop 6.4s ease 1.9s backwards; }
-.browser-window.in-view .browser-hero-text .browser-line:nth-child(2) { animation: browserPop 6.4s ease 2.05s backwards; }
-.browser-window.in-view .browser-hero-text .browser-line:nth-child(3) { animation: browserPop 6.4s ease 2.2s backwards; }
-.browser-window.in-view .browser-hero-text .browser-pill { animation: browserPop 6.4s ease 2.35s backwards; }
+.browser-window.in-view .browser-hero-text .browser-line:nth-child(1) { animation: browserPop 6.4s ease 1.9s infinite backwards; }
+.browser-window.in-view .browser-hero-text .browser-line:nth-child(2) { animation: browserPop 6.4s ease 2.05s infinite backwards; }
+.browser-window.in-view .browser-hero-text .browser-line:nth-child(3) { animation: browserPop 6.4s ease 2.2s infinite backwards; }
+.browser-window.in-view .browser-hero-text .browser-pill { animation: browserPop 6.4s ease 2.35s infinite backwards; }
 
-.browser-window.in-view .browser-cursor { animation: browserCursor 6.4s ease 2.5s backwards; }
+.browser-window.in-view .browser-cursor { animation: browserCursor 6.4s ease 2.5s infinite backwards; }
 
-.browser-window.in-view .browser-cards .browser-card:nth-child(1) { animation: browserPop 6.4s ease 3s backwards; }
-.browser-window.in-view .browser-cards .browser-card:nth-child(2) { animation: browserPop 6.4s ease 3.15s backwards; }
-.browser-window.in-view .browser-cards .browser-card:nth-child(3) { animation: browserPop 6.4s ease 3.3s backwards; }
+.browser-window.in-view .browser-cards .browser-card:nth-child(1) { animation: browserPop 6.4s ease 3s infinite backwards; }
+.browser-window.in-view .browser-cards .browser-card:nth-child(2) { animation: browserPop 6.4s ease 3.15s infinite backwards; }
+.browser-window.in-view .browser-cards .browser-card:nth-child(3) { animation: browserPop 6.4s ease 3.3s infinite backwards; }
 
-.browser-window.in-view .browser-check { animation: browserCheck 6.4s ease 4s backwards; }
+.browser-window.in-view .browser-check { animation: browserCheck 6.4s ease 4s infinite backwards; }
 
-.browser-window.in-view .browser-progress-bar { animation: browserBuild 6.4s ease 0s backwards; }
-.browser-window.in-view .browser-status .st-build { animation: buildStatusA 6.4s ease backwards; }
-.browser-window.in-view .browser-status .st-done { animation: buildStatusB 6.4s ease backwards; }
-.browser-window.in-view .browser-status-dot { animation: buildDot 6.4s ease backwards; }
+.browser-window.in-view .browser-progress-bar { animation: browserBuild 6.4s ease 0s infinite backwards; }
+.browser-window.in-view .browser-status .st-build { animation: buildStatusA 6.4s ease infinite backwards; }
+.browser-window.in-view .browser-status .st-done { animation: buildStatusB 6.4s ease infinite backwards; }
+.browser-window.in-view .browser-status-dot { animation: buildDot 6.4s ease infinite backwards; }
 
 @keyframes browserPop {
   0%   { opacity: 0; transform: translateY(14px) scale(0.92); }
@@ -3454,6 +3559,16 @@ a.info-card-value:hover {
 
   .cursor-dot, .cursor-ring, .spotlight {
     display: none;
+  }
+}
+
+/* The "website being created" demo is an on-demand build loop — it must keep
+   looping even for reduced-motion users, so it escapes the global animation
+   kill above (opacity/width only, no flashing, no screen motion). */
+@media (prefers-reduced-motion: reduce) {
+  .browser-window.in-view * {
+    animation-duration: 6.4s !important;
+    animation-iteration-count: infinite !important;
   }
 }
 
@@ -4843,32 +4958,39 @@ html[data-theme="light"] .logo-text {
 
 /* Light theme — lift the character palette so it stays visible on white glass */
 html[data-theme="light"] .char-head {
-  background: linear-gradient(165deg, #f2c9a3 0%, #dfab7c 62%, #d09a6a 100%);
+  background: linear-gradient(165deg, #fbe6cd 0%, #f4c9a3 60%, #e6b184 100%);
 }
 
 html[data-theme="light"] .char-face {
-  background: linear-gradient(180deg, #f0c39b, #dda87a);
+  background: linear-gradient(180deg, #f9dcbf, #f2c299);
 }
 
 html[data-theme="light"] .char-neck,
 html[data-theme="light"] .char-hand {
-  background: linear-gradient(160deg, #eec09a, #d39a68);
+  background: linear-gradient(160deg, #f5d3b2, #dba577);
 }
 
 html[data-theme="light"] .char-body {
-  background: linear-gradient(160deg, #9d82ff 0%, #7a5cf0 55%, #6445d4 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #e9e9ee 55%, #d4d4db 100%);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 6px rgba(90, 90, 110, 0.2),
+    0 14px 34px rgba(15, 23, 42, 0.28);
 }
 
 html[data-theme="light"] .char-hood {
-  background: linear-gradient(180deg, #8f72ff 0%, #6a4de0 85%);
+  background: linear-gradient(180deg, #ffffff 0%, #e0e0e6 85%);
+  border-color: rgba(255, 255, 255, 0.9);
 }
 
 html[data-theme="light"] .char-arm {
-  background: linear-gradient(180deg, #7a5cf0, #5a3ec4);
+  background: linear-gradient(180deg, #f7f7fa, #cbcbd2);
+  border-color: rgba(255, 255, 255, 0.85);
 }
 
 html[data-theme="light"] .char-leg {
-  background: linear-gradient(180deg, #3c4a7c, #2a3458);
+  background: linear-gradient(180deg, #37406a, #232b49);
 }
 
 html[data-theme="light"] .char-shadow {
@@ -5012,11 +5134,13 @@ html[data-theme="light"] .char-shadow {
   .ring-2 { width: 285px; height: 285px; }
 }
 
-/* Reduced motion: still eyes, no tracking / wave / float animation */
+/* Reduced motion: still eyes, no tracking / wave / float / breathing animation */
 @media (prefers-reduced-motion: reduce) {
   .char-eye,
   .pupil,
   .char-shadow,
+  .char-head,
+  .char-body,
   .avatar,
   .avatar.excited .char-head,
   .avatar.excited .char-arm.right {
@@ -5538,9 +5662,15 @@ html[data-theme="light"] .char-shadow {
 .section-tag,
 .stat-num,
 .process-title,
-.browser-logo,
 .profile-card::before {
   animation: none !important;
+}
+
+/* The browser-logo is inside the "website being created" demo — it must
+   participate in the looping build sequence (browserPop), so its idle
+   gradient loop only ever runs while the demo card is actually visible. */
+.browser-window:not(.in-view) .browser-logo {
+  animation: none;
 }
 
 /* Static leftover rings from killed pulses would look like permanent

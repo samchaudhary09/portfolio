@@ -1604,6 +1604,60 @@ window.SITE_PROJECTS = PROJECTS;
   };
 
   /* =========================================================================
+     23B. TAP SHIM — touch-only click safety net
+     -------------------------------------------------------------------------
+     Some mobile browsers / webviews occasionally drop the click that should
+     follow a tap (3D-transformed elements, GPU layer pressure, overlay edge
+     cases). This passive shim watches pointerup on coarse pointers; if the
+     tapped interactive element never receives its native click, it fires
+     one for it. A native click cancels the fallback — nothing double-fires.
+     ======================================================================== */
+  const initTapShim = () => {
+    if (!('PointerEvent' in window)) return;
+    if (!window.matchMedia('(pointer: coarse)').matches) return;
+
+    const INTERACTIVE = 'a[href], button, [role="button"], .btn, input[type="submit"], input[type="button"]';
+    let down = null;    /* pointerdown anchor */
+    let pending = null; /* fallback timer */
+
+    const cancel = () => {
+      if (!pending) return;
+      clearTimeout(pending.timer);
+      pending = null;
+    };
+
+    document.addEventListener('pointerdown', (e) => {
+      cancel();
+      down = { x: e.clientX, y: e.clientY };
+    }, { passive: true });
+
+    /* A quick tap on an interactive element whose native click never arrives
+       gets one delivered ~380ms later (native click cancels it first). */
+    document.addEventListener('pointerup', (e) => {
+      if (!down) return;
+      /* Scroll / drag between down and up is not a tap */
+      if (Math.abs(e.clientX - down.x) > 12 || Math.abs(e.clientY - down.y) > 12) {
+        down = null;
+        return;
+      }
+      const el = e.target && e.target.closest ? e.target.closest(INTERACTIVE) : null;
+      down = null;
+      if (!el) return;
+      pending = { el, timer: setTimeout(() => {
+        if (el.isConnected) {
+          try { el.click(); } catch (err) { /* ignore */ }
+        }
+        pending = null;
+      }, 380) };
+    }, { passive: true });
+
+    /* Native click beats the fallback */
+    document.addEventListener('click', (e) => {
+      if (pending && (e.target === pending.el || pending.el.contains(e.target))) cancel();
+    }, true);
+  };
+
+  /* =========================================================================
      BOOT — init everything when the DOM is ready
      ======================================================================== */
 
@@ -1641,6 +1695,7 @@ window.SITE_PROJECTS = PROJECTS;
     run(initSmoothScroll);
     run(initAvatar);
     run(initISTClock);
+    run(initTapShim);
   };
 
   if (document.readyState === 'loading') {

@@ -3083,87 +3083,101 @@ a.info-card-value:hover {
   opacity: 0;
 }
 
-.browser-window.in-view .browser-nav > * { animation: browserPop 6.4s ease infinite backwards; }
-.browser-window.in-view .browser-nav > *:nth-child(1) { animation-delay: 0.4s; }
-.browser-window.in-view .browser-nav > *:nth-child(2) { animation-delay: 0.55s; }
-.browser-window.in-view .browser-nav > *:nth-child(3) { animation-delay: 0.7s; }
-.browser-window.in-view .browser-nav > *:nth-child(4) { animation-delay: 0.85s; }
-.browser-window.in-view .browser-nav > *:nth-child(5) { animation-delay: 1s; }
+/* The "website being created" demo — one 10.4s master loop.
+   Every element's timing is baked INTO its keyframes (staggered pop-in at
+   P% of the cycle, fade out at the end), so EVERY cycle replays the exact
+   same staggered build. Plain animation-delay was the bug: a positive delay
+   only applies on the FIRST iteration, so from cycle two onward everything
+   restarted in sync and the sequence collapsed into a single quick pop. */
+.browser-window.in-view .browser-nav > *:nth-child(1) { animation: bPop01 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-nav > *:nth-child(2) { animation: bPop02 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-nav > *:nth-child(3) { animation: bPop03 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-nav > *:nth-child(4) { animation: bPop04 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-nav > *:nth-child(5) { animation: bPop05 10.4s ease infinite backwards; }
 
-.browser-window.in-view .browser-hero { animation: browserPop 6.4s ease 1.2s infinite backwards; }
+.browser-window.in-view .browser-hero { animation: bPop06 10.4s ease infinite backwards; }
 
-.browser-window.in-view .browser-visual .browser-shape:nth-child(1) { animation: browserPop 6.4s ease 1.5s infinite backwards; }
-.browser-window.in-view .browser-visual .browser-shape:nth-child(2) { animation: browserPop 6.4s ease 1.65s infinite backwards; }
-.browser-window.in-view .browser-visual .browser-shape:nth-child(3) { animation: browserPop 6.4s ease 1.8s infinite backwards; }
+.browser-window.in-view .browser-visual .browser-shape:nth-child(1) { animation: bPop07 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-visual .browser-shape:nth-child(2) { animation: bPop08 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-visual .browser-shape:nth-child(3) { animation: bPop09 10.4s ease infinite backwards; }
 
-.browser-window.in-view .browser-hero-text .browser-line:nth-child(1) { animation: browserPop 6.4s ease 1.9s infinite backwards; }
-.browser-window.in-view .browser-hero-text .browser-line:nth-child(2) { animation: browserPop 6.4s ease 2.05s infinite backwards; }
-.browser-window.in-view .browser-hero-text .browser-line:nth-child(3) { animation: browserPop 6.4s ease 2.2s infinite backwards; }
-.browser-window.in-view .browser-hero-text .browser-pill { animation: browserPop 6.4s ease 2.35s infinite backwards; }
+.browser-window.in-view .browser-hero-text .browser-line:nth-child(1) { animation: bPop10 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-hero-text .browser-line:nth-child(2) { animation: bPop11 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-hero-text .browser-line:nth-child(3) { animation: bPop12 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-hero-text .browser-pill { animation: bPop13 10.4s ease infinite backwards; }
 
-.browser-window.in-view .browser-cursor { animation: browserCursor 6.4s ease 2.5s infinite backwards; }
+.browser-window.in-view .browser-cursor { animation: bCursor 10.4s ease infinite backwards; }
 
-.browser-window.in-view .browser-cards .browser-card:nth-child(1) { animation: browserPop 6.4s ease 3s infinite backwards; }
-.browser-window.in-view .browser-cards .browser-card:nth-child(2) { animation: browserPop 6.4s ease 3.15s infinite backwards; }
-.browser-window.in-view .browser-cards .browser-card:nth-child(3) { animation: browserPop 6.4s ease 3.3s infinite backwards; }
+.browser-window.in-view .browser-cards .browser-card:nth-child(1) { animation: bPop14 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-cards .browser-card:nth-child(2) { animation: bPop15 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-cards .browser-card:nth-child(3) { animation: bPop16 10.4s ease infinite backwards; }
 
-.browser-window.in-view .browser-check { animation: browserCheck 6.4s ease 4s infinite backwards; }
+.browser-window.in-view .browser-check { animation: bCheck 10.4s ease infinite backwards; }
 
-.browser-window.in-view .browser-progress-bar { animation: browserBuild 6.4s ease 0s infinite backwards; }
-.browser-window.in-view .browser-status .st-build { animation: buildStatusA 6.4s ease infinite backwards; }
-.browser-window.in-view .browser-status .st-done { animation: buildStatusB 6.4s ease infinite backwards; }
-.browser-window.in-view .browser-status-dot { animation: buildDot 6.4s ease infinite backwards; }
+.browser-window.in-view .browser-progress-bar { animation: bBuild 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-status .st-build { animation: bStatusA 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-status .st-done { animation: bStatusB 10.4s ease infinite backwards; }
+.browser-window.in-view .browser-status-dot { animation: bDot 10.4s ease infinite backwards; }
 
-@keyframes browserPop {
-  0%   { opacity: 0; transform: translateY(14px) scale(0.92); }
-  8%   { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+/* Shared pop pattern — only the pop-in offset differs per element */
+@keyframes bPop01 { 0%, 3.8% { opacity: 0; transform: translateY(14px) scale(0.92); } 7.8%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop02 { 0%, 5.3% { opacity: 0; transform: translateY(14px) scale(0.92); } 9.3%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop03 { 0%, 6.7% { opacity: 0; transform: translateY(14px) scale(0.92); } 10.7%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop04 { 0%, 8.2% { opacity: 0; transform: translateY(14px) scale(0.92); } 12.2%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop05 { 0%, 9.6% { opacity: 0; transform: translateY(14px) scale(0.92); } 13.6%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop06 { 0%, 11.5% { opacity: 0; transform: translateY(14px) scale(0.92); } 15.5%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop07 { 0%, 14.4% { opacity: 0; transform: translateY(14px) scale(0.92); } 18.4%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop08 { 0%, 15.9% { opacity: 0; transform: translateY(14px) scale(0.92); } 19.9%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop09 { 0%, 17.3% { opacity: 0; transform: translateY(14px) scale(0.92); } 21.3%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop10 { 0%, 18.3% { opacity: 0; transform: translateY(14px) scale(0.92); } 22.3%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop11 { 0%, 19.7% { opacity: 0; transform: translateY(14px) scale(0.92); } 23.7%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop12 { 0%, 21.2% { opacity: 0; transform: translateY(14px) scale(0.92); } 25.2%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop13 { 0%, 22.6% { opacity: 0; transform: translateY(14px) scale(0.92); } 26.6%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop14 { 0%, 28.8% { opacity: 0; transform: translateY(14px) scale(0.92); } 32.8%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop15 { 0%, 30.3% { opacity: 0; transform: translateY(14px) scale(0.92); } 34.3%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+@keyframes bPop16 { 0%, 31.7% { opacity: 0; transform: translateY(14px) scale(0.92); } 35.7%, 96.5% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(14px) scale(0.92); } }
+
+/* Cursor blinks through the build, then goes quiet */
+@keyframes bCursor {
+  0%, 23.9%    { opacity: 0; }
+  27.7%        { opacity: 1; }
+  31.4%        { opacity: 0; }
+  35.1%        { opacity: 1; }
+  38.8%        { opacity: 0; }
+  42.5%        { opacity: 1; }
+  47.4%, 100%  { opacity: 0; }
 }
 
-@keyframes browserBuild {
-  0%   { width: 0; opacity: 1; }
-  44%  { width: 100%; opacity: 1; }
-  52%  { width: 100%; opacity: 1; }
-  58%  { width: 100%; opacity: 0; }
-  100% { width: 100%; opacity: 0; }
+/* Checkmark pops once the build completes, holds, then hides */
+@keyframes bCheck {
+  0%, 38.5%   { opacity: 0; transform: scale(0) rotate(-25deg); }
+  42.5%, 58%  { opacity: 1; transform: scale(1) rotate(0deg); }
+  63%, 100%   { opacity: 0; transform: scale(0.9) rotate(0deg); }
 }
 
-@keyframes browserCursor {
-  0%   { opacity: 0; }
-  6%   { opacity: 1; }
-  12%  { opacity: 0; }
-  18%  { opacity: 1; }
-  24%  { opacity: 0; }
-  30%  { opacity: 1; }
-  38%  { opacity: 0; }
-  100% { opacity: 0; }
+/* Progress bar fills as the site is built */
+@keyframes bBuild {
+  0%    { width: 0; opacity: 1; }
+  35.6% { width: 100%; opacity: 1; }
+  38%, 100% { width: 100%; opacity: 0; }
 }
 
-@keyframes browserCheck {
-  0%   { opacity: 0; transform: scale(0) rotate(-25deg); }
-  6%   { opacity: 1; transform: scale(1) rotate(0deg); }
-  22%  { opacity: 1; transform: scale(1) rotate(0deg); }
-  27%  { opacity: 0; transform: scale(0.9) rotate(0deg); }
-  100% { opacity: 0; transform: scale(0.9) rotate(0deg); }
+/* Status text: "Building…" hands over to "Deployed ✓" */
+@keyframes bStatusA {
+  0%, 34%     { opacity: 1; }
+  36.5%, 100% { opacity: 0; }
 }
 
-@keyframes buildStatusA {
-  0%   { opacity: 1; }
-  56%  { opacity: 1; }
-  60%  { opacity: 0; }
-  100% { opacity: 0; }
+@keyframes bStatusB {
+  0%, 36.5%    { opacity: 0; }
+  38.5%, 96.5% { opacity: 1; }
+  100%         { opacity: 0; }
 }
 
-@keyframes buildStatusB {
-  0%   { opacity: 0; }
-  56%  { opacity: 0; }
-  60%  { opacity: 1; }
-  100% { opacity: 1; }
-}
-
-@keyframes buildDot {
-  0%, 56%  { background: #f5a623; box-shadow: 0 0 8px rgba(245, 166, 35, 0.9); }
-  60%, 100% { background: #14F195; box-shadow: 0 0 8px rgba(20, 241, 149, 0.9); }
+@keyframes bDot {
+  0%, 34%    { background: #f5a623; box-shadow: 0 0 8px rgba(245, 166, 35, 0.9); }
+  36.5%, 96.5% { background: #14F195; box-shadow: 0 0 8px rgba(20, 241, 149, 0.9); }
+  100%       { background: #f5a623; box-shadow: 0 0 8px rgba(245, 166, 35, 0.9); }
 }
 
 @media (max-width: 480px) {
@@ -3567,7 +3581,7 @@ a.info-card-value:hover {
    kill above (opacity/width only, no flashing, no screen motion). */
 @media (prefers-reduced-motion: reduce) {
   .browser-window.in-view * {
-    animation-duration: 6.4s !important;
+    animation-duration: 10.4s !important;
     animation-iteration-count: infinite !important;
   }
 }

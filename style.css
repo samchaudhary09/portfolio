@@ -5768,3 +5768,24 @@ button,
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* =========================================================================
+   34. IDLE FREEZE — the page must sit completely still once scrolling
+       stops. While `body.is-active` (user scrolling/pointing) decorative
+       layers animate as usual; after ~400ms of inactivity they pause, so
+       no gradient, blob, ring, icon or glow keeps drifting when idle.
+       Paused animations resume seamlessly on the next scroll/pointer.
+   ========================================================================= */
+body:not(.is-active) .bg-scene *,
+body:not(.is-active) .ring-1,
+body:not(.is-active) .ring-2,
+body:not(.is-active) .ring-3,
+body:not(.is-active) .float-icon,
+body:not(.is-active) .char-scene *,
+body:not(.is-active) .char-shadow,
+body:not(.is-active) .avatar-bubble,
+body:not(.is-active) .profile-glow,
+body:not(.is-active) .scroll-mouse,
+body:not(.is-active) .marquee-track {
+  animation-play-state: paused !important;
+}

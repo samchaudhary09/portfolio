@@ -389,18 +389,32 @@ window.SITE_PROJECTS = PROJECTS;
 
     /* Live loop — desktop only. On phones the canvas sits on the full-screen
        fixed background layer; a 60fps repaint of that layer makes scrolling
-       laggy, so touch devices get one static frame instead. */
+       laggy, so touch devices get one static frame instead. On desktop the
+       loop also stops when the page goes idle (see initActivityGate) and
+       restarts on the next wake — nothing repaints when the page is still. */
     const loop = () => {
+      if (document.hidden || !document.body.classList.contains('is-active')) {
+        rafId = null;
+        return;
+      }
       draw();
       rafId = requestAnimationFrame(loop);
     };
+
+    const restartLoop = () => {
+      if (document.hidden || !document.body.classList.contains('is-active')) return;
+      if (!rafId) rafId = requestAnimationFrame(loop);
+    };
+
+    pageWakeHooks.push(restartLoop);
 
     /* Pause the loop when the tab is hidden (performance) */
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         cancelAnimationFrame(rafId);
-      } else if (!isTouch) {
-        rafId = requestAnimationFrame(loop);
+        rafId = null;
+      } else {
+        restartLoop();
       }
     });
 
@@ -1696,8 +1710,36 @@ window.SITE_PROJECTS = PROJECTS;
     }
   };
 
+  /* Shared page-activity bus. `initActivityGate` flips `body.is-active`
+     while the user scrolls/points and drops it after a short idle — the CSS
+     pauses all decorative motion when idle so the page sits perfectly still
+     once scrolling stops. Loops (particles) hook in via pageWakeHooks. */
+  const pageWakeHooks = [];
+
+  const initActivityGate = () => {
+    const IDLE_MS = 400;
+    let idleTimer = null;
+
+    const wake = () => {
+      if (!document.body.classList.contains('is-active')) {
+        document.body.classList.add('is-active');
+      }
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        document.body.classList.remove('is-active');
+      }, IDLE_MS);
+      pageWakeHooks.forEach((fn) => fn());
+    };
+
+    window.addEventListener('scroll', wake, { passive: true });
+    window.addEventListener('pointerdown', wake, { passive: true });
+    window.addEventListener('pointermove', wake, { passive: true });
+    wake();
+  };
+
   const init = () => {
     run(initDeveloperData);   /* must run first so rendered nodes exist below */
+    run(initActivityGate);    /* drives body.is-active — decorative freeze */
     run(initProjectPage);     /* overrides the document title on project.html */
     run(initParticles);
     run(initCursor);

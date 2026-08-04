@@ -5789,3 +5789,16 @@ body:not(.is-active) .scroll-mouse,
 body:not(.is-active) .marquee-track {
   animation-play-state: paused !important;
 }
+
+/* 34A. SCROLL-TIME GLASS OFF (touch only) — backdrop-filter is the biggest
+        mobile scroll jank source: while the user is scrolling (body.is-active)
+        the content behind glass layers changes every frame, forcing a full
+        re-blur per frame on iOS. During scroll the layers swap to near-solid;
+        the blur + its 0.4s ease animate back in once scrolling stops. */
+html.touch body.is-active .navbar:not(:has(.nav-links.open)),
+html.touch body.is-active .profile-card,
+html.touch body.is-active .chat-card:not(.open) {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  transition: none !important;
+}

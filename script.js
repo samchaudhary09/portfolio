@@ -293,6 +293,7 @@ window.SITE_PROJECTS = PROJECTS;
 
   /* Detect touch devices — disable cursor/spotlight/parallax there */
   const isTouch = window.matchMedia('(pointer: coarse)').matches;
+  if (isTouch) document.documentElement.classList.add('touch');
 
   /* =========================================================================
      1. PAGE LOADER — entrance animation
@@ -633,7 +634,24 @@ window.SITE_PROJECTS = PROJECTS;
     });
   };
 
-  const sweepInView = () => requestAnimationFrame(checkInView);
+  /* Sweep throttled to ~120ms with a 250ms trailing catch-up after the last
+     scroll event. IO is the primary reveal trigger, but on some browsers it
+     delivers late — the sweep must still catch elements that passed through
+     the viewport during a fast smooth auto-scroll. Running it per scroll
+     frame would force a full-page getBoundingClientRect layout read every
+     frame, so we throttle: during scroll ~120ms, plus one final pass once
+     the scroll settles so nothing is ever left invisible. */
+  let lastSweepAt = 0;
+  let sweepTimer = 0;
+  const sweepInView = () => {
+    const now = performance.now();
+    if (now - lastSweepAt >= 120) {
+      lastSweepAt = now;
+      requestAnimationFrame(checkInView);
+    }
+    clearTimeout(sweepTimer);
+    sweepTimer = setTimeout(() => requestAnimationFrame(checkInView), 250);
+  };
 
   const onInView = (el, cb) => {
     let fired = false;

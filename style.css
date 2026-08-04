@@ -5585,10 +5585,22 @@ html[data-theme="light"] .char-shadow {
     background: radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(15, 23, 42, 0.18) 100%);
   }
 
-  /* Lighter, snappier reveal on phones — less perceived scroll lag */
+  /* Lighter, snappier reveal on phones — fade only, no up/down motion */
   .fade-up {
-    transform: translateY(18px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
+    transform: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .fade-up.in-view {
+    transform: none;
+  }
+
+  /* Progressive-render size estimates cause layout jumps on phones: each
+     section renders taller than its 700px estimate mid-scroll, shifting all
+     content below it down → jittery up/down while scrolling. Render the
+     page fully on mobile so the layout is stable. */
+  .section:not(.hero):not(.page-hero) {
+    content-visibility: visible;
   }
 }
 

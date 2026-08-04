@@ -838,6 +838,12 @@ ul {
 .type-wrap {
   display: inline-flex;
   align-items: center;
+  /* CRITICAL for layout stability: the typed line toggles between the
+     caret's 1.15em and the text line-height (1.6em inherited from body)
+     as words type/delete. Pinning the wrap to 1.6em keeps the hero-role
+     height (and therefore the whole page height) constant forever — the
+     typing animation never causes a layout shift again. */
+  min-height: 1.6em;
 }
 
 .typed-text {
@@ -5786,7 +5792,10 @@ body:not(.is-active) .char-shadow,
 body:not(.is-active) .avatar-bubble,
 body:not(.is-active) .profile-glow,
 body:not(.is-active) .scroll-mouse,
-body:not(.is-active) .marquee-track {
+body:not(.is-active) .marquee-track,
+body:not(.is-active) .browser-window *,
+body:not(.is-active) .badge-pulse,
+body:not(.is-active) .badge-pulse::after {
   animation-play-state: paused !important;
 }
 

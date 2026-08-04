@@ -445,15 +445,25 @@ window.SITE_PROJECTS = PROJECTS;
     let mx = 0, my = 0;          // target position
     let rx = 0, ry = 0;          // ring (lerped) position
     let sx = 0, sy = 0;          // spotlight (lerped) position
+    let sleeping = false;
 
     window.addEventListener('mousemove', (e) => {
       mx = e.clientX;
       my = e.clientY;
       if (dot) dot.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
       if (spotlight) spotlight.style.transform = `translate(${mx}px, ${my}px)`;
+      /* Wake the lerp loop when the mouse moves again */
+      if (sleeping) {
+        sleeping = false;
+        sx = mx;
+        sy = my;
+        requestAnimationFrame(loop);
+      }
     });
 
-    /* Ring trails behind — smooth lerp loop */
+    /* Ring trails behind — smooth lerp loop. It only runs while the ring or
+       spotlight has not yet converged on the mouse; once settled it sleeps
+       (no more rAF, no more transform writes) until the next mousemove. */
     const loop = () => {
       rx += (mx - rx) * 0.16;
       ry += (my - ry) * 0.16;
@@ -461,6 +471,11 @@ window.SITE_PROJECTS = PROJECTS;
       sy += (my - sy) * 0.07;
       if (ring) ring.style.transform = `translate(${rx}px, ${ry}px)`;
       if (spotlight) spotlight.style.transform = `translate(${sx}px, ${sy}px)`;
+      if (Math.abs(rx - mx) < 0.02 && Math.abs(ry - my) < 0.02 &&
+          Math.abs(sx - mx) < 0.02 && Math.abs(sy - my) < 0.02) {
+        sleeping = true;
+        return;
+      }
       requestAnimationFrame(loop);
     };
     loop();
@@ -1655,6 +1670,9 @@ window.SITE_PROJECTS = PROJECTS;
       const hh = String(now.getUTCHours()).padStart(2, '0');
       const mm = String(now.getUTCMinutes()).padStart(2, '0');
       el.textContent = `🕐 IST ${hh}:${mm}`;
+      /* Pin the chip width after the first real tick — otherwise the text
+         width change every 30s nudges the profile-card layout (CLS). */
+      if (!el.style.minWidth) el.style.minWidth = `${el.offsetWidth}px`;
     };
     tick();
     setInterval(tick, 30000);

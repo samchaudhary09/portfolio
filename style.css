@@ -28,6 +28,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
+  min-height: 100svh;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -635,6 +636,7 @@ ul {
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   padding: 140px 0 90px;
@@ -947,7 +949,7 @@ ul {
 .profile-card {
   position: relative;
   z-index: 3;
-  width: 300px;
+  width: 330px;
   padding: 38px 32px 30px;
   border-radius: var(--radius-lg);
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02));
@@ -1970,7 +1972,18 @@ ul {
   transition: transform 0.6s var(--ease-out);
 }
 
-.project-card:hover .project-thumb svg {
+/* Uploaded project screenshot (set image: in the project config) */
+.project-thumb img.project-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.project-card:hover .project-thumb svg,
+.project-card:hover .project-thumb img.project-img {
   transform: scale(1.1);
 }
 
@@ -3517,7 +3530,7 @@ a.info-card-value:hover {
 /* ---------- Small phones (≤ 420px) ---------- */
 @media (max-width: 420px) {
   .profile-card {
-    width: 260px;
+    width: 290px;
     padding: 30px 22px 24px;
   }
 
@@ -5186,7 +5199,7 @@ html[data-theme="light"] .char-shadow {
    ========================================================================== */
 @media (max-width: 768px) {
   .profile-card {
-    width: 220px;
+    width: 250px;
     padding: 20px 18px 18px;
     border-radius: 26px;
   }
@@ -5392,7 +5405,7 @@ html[data-theme="light"] .char-shadow {
   }
 
   .profile-card {
-    width: 200px;
+    width: 240px;
     padding: 16px 14px 14px;
     border-radius: 24px;
   }

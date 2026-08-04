@@ -75,9 +75,17 @@ const DEVELOPER_CONFIG = {
 /* =======================================================
    PROJECT DATA — used by the dedicated project detail
    pages (project.html?project=<slug>)
+
+   🖼 PROJECT IMAGES:
+   To show a screenshot/highlight image for a project on
+   the cards (index grid + Projects page), upload the file
+   to  images/projects/<slug>.png  and add one line to that
+   project below:   image: 'images/projects/<slug>.png'
+   The card thumbnail renders it automatically.
    ======================================================= */
 const PROJECTS = [
   {
+    /* 🖼 image: 'images/projects/hp-printer-ecommerce.png' */
     slug: 'hp-printer-ecommerce',
     title: 'HP Inspired Printer E-Commerce Website',
     category: 'E-Commerce',
@@ -105,6 +113,7 @@ const PROJECTS = [
     github: '#',
   },
   {
+    /* 🖼 image: 'images/projects/epson-inspired-business.png' */
     slug: 'epson-inspired-business',
     title: 'Epson Inspired Business Website',
     category: 'Corporate',
@@ -132,6 +141,7 @@ const PROJECTS = [
     github: '#',
   },
   {
+    /* 🖼 image: 'images/projects/woocommerce-online-store.png' */
     slug: 'woocommerce-online-store',
     title: 'WooCommerce Online Store',
     category: 'Online Store',
@@ -159,6 +169,7 @@ const PROJECTS = [
     github: '#',
   },
   {
+    /* 🖼 image: 'images/projects/corporate-business-website.png' */
     slug: 'corporate-business-website',
     title: 'Corporate Business Website',
     category: 'Corporate',
@@ -186,6 +197,7 @@ const PROJECTS = [
     github: '#',
   },
   {
+    /* 🖼 image: 'images/projects/react-saas-dashboard.png' */
     slug: 'react-saas-dashboard',
     title: 'React SaaS Dashboard',
     category: 'Web App',
@@ -213,6 +225,7 @@ const PROJECTS = [
     github: '#',
   },
   {
+    /* 🖼 image: 'images/projects/ai-powered-portfolio.png' */
     slug: 'ai-powered-portfolio',
     title: 'AI Powered Portfolio Website',
     category: 'AI Powered',
@@ -1243,6 +1256,7 @@ window.SITE_PROJECTS = PROJECTS;
             ${projects.map((p, i) => `
               <article class="project-card tilt-card fade-up in-view" style="--i: ${i}">
                 <div class="project-thumb" style="background: linear-gradient(135deg, ${p.colors[0]}66, rgba(15,23,42,0.9))">
+                  ${p.image ? `<img class="project-img" src="${p.image}" alt="${p.title} screenshot" loading="lazy">` : ''}
                   <span class="project-cat">${p.category}</span>
                 </div>
                 <div class="project-body">

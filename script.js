@@ -385,22 +385,33 @@ window.SITE_PROJECTS = PROJECTS;
       }
       ctx.globalAlpha = 1;
       ctx.shadowBlur = 0;
+    };
 
-      rafId = requestAnimationFrame(draw);
+    /* Live loop — desktop only. On phones the canvas sits on the full-screen
+       fixed background layer; a 60fps repaint of that layer makes scrolling
+       laggy, so touch devices get one static frame instead. */
+    const loop = () => {
+      draw();
+      rafId = requestAnimationFrame(loop);
     };
 
     /* Pause the loop when the tab is hidden (performance) */
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         cancelAnimationFrame(rafId);
-      } else {
-        rafId = requestAnimationFrame(draw);
+      } else if (!isTouch) {
+        rafId = requestAnimationFrame(loop);
       }
     });
 
     resize();
-    draw();
-    window.addEventListener('resize', debounce(resize));
+    if (isTouch) {
+      draw();   /* static frame — no live loop on phones */
+      window.addEventListener('resize', debounce(() => { resize(); draw(); }));
+    } else {
+      loop();
+      window.addEventListener('resize', debounce(resize));
+    }
   };
 
   /* =========================================================================
